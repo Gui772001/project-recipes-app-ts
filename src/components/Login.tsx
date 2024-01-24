@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isFormValid, setFormValid] = useState(false);
+
+  const navigate = useNavigate();
 
   const validateForm = () => {
     const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -24,6 +27,10 @@ function Login() {
 
   const handleSubmit = () => {
     if (isFormValid) {
+      const user = { email };
+      localStorage.setItem('user', JSON.stringify(user));
+      navigate('/meals', { replace: true });
+
       console.log('Formulário válido. Enviar dados:', { email, password });
     } else {
       console.log('Formulário inválido. Corrija os campos.');
@@ -32,7 +39,9 @@ function Login() {
 
   return (
     <div>
-      <label htmlFor="email">
+      <label
+        htmlFor="email"
+      >
         <input
           placeholder="E-mail"
           title="email"
