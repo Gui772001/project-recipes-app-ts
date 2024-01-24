@@ -2,9 +2,14 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import App from '../App';
 
-test('Farewell, front-end', () => {
-  // Este arquivo pode ser modificado ou deletado sem problemas
-  render(<App />);
-  const linkElement = screen.getByText(/TRYBE/i);
-  expect(linkElement).toBeInTheDocument();
+describe('Verificando os elementos de login', () => {
+  test('Verifica se os inputs de email, password e button estão na tela', () => {
+    render(<App />);
+    const inputEmail = screen.getByTestId('email-input');
+    expect(inputEmail).toBeInTheDocument();
+    const inputPassword = screen.getByTestId('password-input');
+    expect(inputPassword).toBeInTheDocument();
+    const submitBtn = screen.getByTestId('login-submit-btn');
+    expect(submitBtn).toBeInTheDocument();
+  });
 });
