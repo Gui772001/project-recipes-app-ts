@@ -27,7 +27,7 @@ describe('App', () => {
     expect(submitBtn).toBeDisabled();
   });
 
-  test('habilita o botão quando email e senha são válidos', () => {
+  test.only('habilita o botão quando email e senha são válidos', () => {
     render(<App />);
     fireEvent.change(inputEmail, { target: { value: 'test@example.com' } });
     fireEvent.change(inputPassword, { target: { value: 'password123' } });
