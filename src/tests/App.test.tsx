@@ -64,7 +64,7 @@ describe('App', () => {
     const inputEmail = screen.getByTestId(INPUT_EMAIL);
 
     fireEvent.change(inputEmail, { target: { value: 'invalid-email' } });
-    expect(screen.getByText('Senha mínima 6 caracteres.')).toBeInTheDocument();
+    expect(screen.getByText('Senha mínima 7 caracteres.')).toBeInTheDocument();
   });
 
   test('Exibe mensagem de erro ao fornecer uma senha curta', () => {
@@ -83,12 +83,12 @@ describe('App', () => {
     const submitBtn = screen.getByTestId(LOGIN_SUBMIT_BUTTON);
 
     fireEvent.change(inputEmail, { target: { value: 'teste@teste.com' } });
-    fireEvent.change(inputPassword, { target: { value: '123456' } });
+    fireEvent.change(inputPassword, { target: { value: '1234567' } });
     fireEvent.click(submitBtn);
 
     const lsUser = localStorage.getItem('user');
 
-    expect(lsUser).toBe('{"email":"teste@teste.com","password":"123456"}');
+    expect(lsUser).toBe('{"email":"teste@teste.com"}');
   });
 });
 

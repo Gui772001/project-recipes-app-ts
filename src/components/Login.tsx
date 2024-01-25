@@ -14,7 +14,7 @@ function Login() {
 
   const validateForm = useCallback(() => {
     const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    const isPasswordValid = password.length >= 6;
+    const isPasswordValid = password.length > 6;
 
     setFormValid(isEmailValid && isPasswordValid);
   }, [email, password, setFormValid]);
@@ -35,7 +35,7 @@ function Login() {
 
   const handleSubmit = () => {
     if (isFormValid) {
-      const user = { email, password };
+      const user = { email };
       localStorage.setItem('user', JSON.stringify(user));
       navigate('/meals', { replace: true });
     }
@@ -80,7 +80,7 @@ function Login() {
       {!isFormValid && (
         <>
           <span>Email ou senha inválidos.</span>
-          <span>Senha mínima 6 caracteres.</span>
+          <span>Senha mínima 7 caracteres.</span>
         </>
       )}
     </div>
