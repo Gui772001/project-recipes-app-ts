@@ -1,7 +1,9 @@
-import { fireEvent, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
+import { BrowserRouter } from 'react-router-dom';
 import renderWithRouter from '../renderWithRouter';
 import App from '../App';
+import Header from '../components/Header';
 
 const INPUT_PASSWORD = 'password-input';
 const INPUT_EMAIL = 'email-input';
@@ -131,5 +133,40 @@ describe('Header', () => {
     expect(window.location.pathname).toBe('/favorite-recipes');
     const tittle = screen.getByRole('heading', { name: 'Favorite Recipes', level: 1 });
     expect(tittle).toBeInTheDocument();
+  });
+
+  it('Verifica rota e exibição do header para search', () => {
+    renderWithRouter(<App />, { route: '/search' });
+    expect(window.location.pathname).toBe('/search');
+    const tittle = screen.getByRole('heading', { name: 'Search', level: 1 });
+    expect(tittle).toBeInTheDocument();
+  });
+  it('O cabeçalho renderiza os botões de perfil e pesquisa corretamente', () => {
+    render(
+      <BrowserRouter>
+        <Header />
+      </BrowserRouter>,
+    );
+    const profileButton = screen.getByTestId('profile-top-btn');
+    expect(profileButton).toBeInTheDocument();
+    const searchButton = screen.getByTestId('search-top-btn');
+    expect(searchButton).toBeInTheDocument();
+  });
+
+  it('A entrada de pesquisa é exibida quando o botão de pesquisa é clicado', () => {
+    render(
+      <BrowserRouter>
+        <Header />
+      </BrowserRouter>,
+    );
+
+    const searchInput = screen.queryByTestId('search-input');
+    expect(searchInput).not.toBeInTheDocument();
+
+    const searchButton = screen.getByTestId('search-top-btn');
+    fireEvent.click(searchButton);
+
+    const updatedSearchInput = screen.getByTestId('search-input');
+    expect(updatedSearchInput).toBeInTheDocument();
   });
 });
