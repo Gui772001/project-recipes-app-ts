@@ -9,7 +9,7 @@ function Header() {
   return (
     <header>
       <h1 data-testid="page-title">{getPageTitle(location.pathname)}</h1>
-      <Link to="/">
+      <Link to="/profile">
         <img data-testid="profile-top-btn" src={ profileIcon } alt="Profile Icon" />
       </Link>
 
@@ -22,7 +22,7 @@ function Header() {
   );
 }
 
-const getPageTitle = (pathname) => {
+const getPageTitle = (pathname: string) => {
   switch (pathname) {
     case '/meals':
       return 'Meals';

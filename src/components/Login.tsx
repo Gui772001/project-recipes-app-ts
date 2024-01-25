@@ -1,28 +1,36 @@
-import React, { useState } from 'react';
+import React, { useCallback, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router';
+import Context from '../context/Context';
 
 function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [isFormValid, setFormValid] = useState(false);
+  const {
+    email,
+    setEmail,
+    password,
+    setPassword,
+    isFormValid,
+    setFormValid,
+  } = useContext(Context);
 
-  const navigate = useNavigate();
-
-  const validateForm = () => {
+  const validateForm = useCallback(() => {
     const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     const isPasswordValid = password.length >= 6;
 
     setFormValid(isEmailValid && isPasswordValid);
-  };
+  }, [email, password, setFormValid]);
+
+  useEffect(() => {
+    validateForm();
+  }, [email, password, validateForm]);
+
+  const navigate = useNavigate();
 
   const handleEmailChange = (event:any) => {
     setEmail(event.target.value);
-    validateForm();
   };
 
   const handlePasswordChange = (event:any) => {
     setPassword(event.target.value);
-    validateForm();
   };
 
   const handleSubmit = () => {
@@ -30,10 +38,6 @@ function Login() {
       const user = { email };
       localStorage.setItem('user', JSON.stringify(user));
       navigate('/meals', { replace: true });
-
-      console.log('Formulário válido. Enviar dados:', { email, password });
-    } else {
-      console.log('Formulário inválido. Corrija os campos.');
     }
   };
 
@@ -72,6 +76,13 @@ function Login() {
       >
         Enter
       </button>
+      <br />
+      {!isFormValid && (
+        <>
+          <span>Email ou senha inválidos.</span>
+          <span>Senha mínima 6 caracteres.</span>
+        </>
+      )}
     </div>
   );
 }
