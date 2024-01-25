@@ -2,6 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
+import SearchBar from './SearchBar';
 
 function Header() {
   const [searchBar, setSearchBar] = useState(false);
@@ -16,15 +17,15 @@ function Header() {
     <header>
       <h1 data-testid="page-title">{getPageTitle(location.pathname)}</h1>
       <Link to="/profile">
-        <img data-testid="profile-top-btn" src={ profileIcon } alt="Profile Icon" />
+        <img data-testid="profile-top-btn" src={profileIcon} alt="Profile Icon" />
       </Link>
 
       {isSearchPage && (
         <Link to="/search">
-          <button onClick={ handleToggle }>
+          <button onClick={handleToggle}>
             <img
               data-testid="search-top-btn"
-              src={ searchIcon }
+              src={searchIcon}
               alt="searchIcon"
             />
           </button>
@@ -32,18 +33,7 @@ function Header() {
       )}
       <div>
         {searchBar && (
-          <div>
-            <label htmlFor="search">
-              <input
-                title="search"
-                type="text"
-                name="search"
-                id="search"
-                data-testid="search-input"
-                placeholder="Search"
-              />
-            </label>
-          </div>
+          <SearchBar />
         )}
       </div>
     </header>

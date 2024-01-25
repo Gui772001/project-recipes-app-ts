@@ -169,4 +169,22 @@ describe('Header', () => {
     const updatedSearchInput = screen.getByTestId('search-input');
     expect(updatedSearchInput).toBeInTheDocument();
   });
+  it('Verirfica os itens da searchBar quando o botão de pesquisa é clicado', () => {
+    render(
+      <BrowserRouter>
+        <Header />
+      </BrowserRouter>,
+    );
+    const buttonSearch = screen.getByTestId('search-top-btn');
+    fireEvent.click(buttonSearch);
+    const inputSearch = screen.getByTestId('search-input');
+    const ingredient = screen.getByTestId('ingredient-search-radio');
+    const nameSearch = screen.getByTestId('name-search-radio');
+    const firstLetter = screen.getByTestId('first-letter-search-radio');
+
+    expect(inputSearch).toBeInTheDocument();
+    expect(ingredient).toBeInTheDocument();
+    expect(nameSearch).toBeInTheDocument();
+    expect(firstLetter).toBeInTheDocument();
+  });
 });
