@@ -15,6 +15,4 @@ export type ContextType = {
   setPassword: React.Dispatch<React.SetStateAction<string>>;
   isFormValid: boolean,
   setFormValid: React.Dispatch<React.SetStateAction<boolean>>;
-  // loginAlertMessage: string,
-  // setLoginAlertMessage: React.Dispatch<React.SetStateAction<string>>,
 };

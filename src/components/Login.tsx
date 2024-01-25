@@ -35,7 +35,7 @@ function Login() {
 
   const handleSubmit = () => {
     if (isFormValid) {
-      const user = { email };
+      const user = { email, password };
       localStorage.setItem('user', JSON.stringify(user));
       navigate('/meals', { replace: true });
     }
