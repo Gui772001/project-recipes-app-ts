@@ -17,7 +17,7 @@
   },
   "scripts": {
     "cy": "env CY_CLI=true cypress run",
-    "cy:open": "cypress open --e2e --browser chrome",
+    "cy:open": "cypress open --e2e --browser electron",
     "build": "vite build",
     "test": "vitest",
     "lint": "eslint --no-inline-config --no-error-on-unmatched-pattern -c .eslintrc.json . --ext .js,.jsx,.ts,.tsx",
