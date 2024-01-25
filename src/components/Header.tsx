@@ -1,10 +1,17 @@
 import { Link, useLocation } from 'react-router-dom';
+import { useState } from 'react';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
+import SearchBar from './SearchBar';
 
 function Header() {
+  const [searchBar, setSearchBar] = useState(false);
   const location = useLocation();
-  const isSearchPage = ['/meals', '/drinks'].includes(location.pathname);
+  const isSearchPage = ['/meals', '/drinks', '/search'].includes(location.pathname);
+
+  function handleToggle() {
+    setSearchBar((prev) => !prev);
+  }
 
   return (
     <header>
@@ -14,10 +21,21 @@ function Header() {
       </Link>
 
       {isSearchPage && (
-        <Link to="/pagina-com-pesquisa">
-          <img data-testid="search-top-btn" src={ searchIcon } alt="Search Icon" />
+        <Link to="/search">
+          <button onClick={ handleToggle }>
+            <img
+              data-testid="search-top-btn"
+              src={ searchIcon }
+              alt="searchIcon"
+            />
+          </button>
         </Link>
       )}
+      <div>
+        {searchBar && (
+          <SearchBar />
+        )}
+      </div>
     </header>
   );
 }
@@ -34,6 +52,8 @@ const getPageTitle = (pathname: string) => {
       return 'Done Recipes';
     case '/favorite-recipes':
       return 'Favorite Recipes';
+    case '/search':
+      return 'Search';
     default:
       return 'Título';
   }
