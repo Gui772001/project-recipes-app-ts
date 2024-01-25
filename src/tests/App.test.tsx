@@ -8,6 +8,8 @@ import Header from '../components/Header';
 const INPUT_PASSWORD = 'password-input';
 const INPUT_EMAIL = 'email-input';
 const LOGIN_SUBMIT_BUTTON = 'login-submit-btn';
+const SEARCH_TEST_ID = 'search-top-btn';
+const SEARCH_INPUT_TEST_ID = 'search-input';
 
 describe('App', () => {
   test('Renderiza corretamente', () => {
@@ -149,7 +151,7 @@ describe('Header', () => {
     );
     const profileButton = screen.getByTestId('profile-top-btn');
     expect(profileButton).toBeInTheDocument();
-    const searchButton = screen.getByTestId('search-top-btn');
+    const searchButton = screen.getByTestId(SEARCH_TEST_ID);
     expect(searchButton).toBeInTheDocument();
   });
 
@@ -160,13 +162,13 @@ describe('Header', () => {
       </BrowserRouter>,
     );
 
-    const searchInput = screen.queryByTestId('search-input');
+    const searchInput = screen.queryByTestId(SEARCH_INPUT_TEST_ID);
     expect(searchInput).not.toBeInTheDocument();
 
-    const searchButton = screen.getByTestId('search-top-btn');
+    const searchButton = screen.getByTestId(SEARCH_TEST_ID);
     fireEvent.click(searchButton);
 
-    const updatedSearchInput = screen.getByTestId('search-input');
+    const updatedSearchInput = screen.getByTestId(SEARCH_INPUT_TEST_ID);
     expect(updatedSearchInput).toBeInTheDocument();
   });
   it('Verirfica os itens da searchBar quando o botão de pesquisa é clicado', () => {
@@ -175,9 +177,9 @@ describe('Header', () => {
         <Header />
       </BrowserRouter>,
     );
-    const buttonSearch = screen.getByTestId('search-top-btn');
+    const buttonSearch = screen.getByTestId(SEARCH_TEST_ID);
     fireEvent.click(buttonSearch);
-    const inputSearch = screen.getByTestId('search-input');
+    const inputSearch = screen.getByTestId(SEARCH_INPUT_TEST_ID);
     const ingredient = screen.getByTestId('ingredient-search-radio');
     const nameSearch = screen.getByTestId('name-search-radio');
     const firstLetter = screen.getByTestId('first-letter-search-radio');

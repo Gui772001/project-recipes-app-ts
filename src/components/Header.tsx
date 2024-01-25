@@ -17,15 +17,15 @@ function Header() {
     <header>
       <h1 data-testid="page-title">{getPageTitle(location.pathname)}</h1>
       <Link to="/profile">
-        <img data-testid="profile-top-btn" src={profileIcon} alt="Profile Icon" />
+        <img data-testid="profile-top-btn" src={ profileIcon } alt="Profile Icon" />
       </Link>
 
       {isSearchPage && (
         <Link to="/search">
-          <button onClick={handleToggle}>
+          <button onClick={ handleToggle }>
             <img
               data-testid="search-top-btn"
-              src={searchIcon}
+              src={ searchIcon }
               alt="searchIcon"
             />
           </button>
