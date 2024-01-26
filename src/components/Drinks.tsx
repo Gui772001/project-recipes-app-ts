@@ -1,8 +1,8 @@
-import { useContext } from "react";
-import Context from "../context/Context";
+import { useContext } from 'react';
+import Context from '../context/Context';
 
 function Drinks() {
-  const { foodDataDrinks, setFoodDataDrinks } = useContext(Context);
+  const { foodDataDrinks } = useContext(Context);
   return (
     <div>
       {foodDataDrinks.map((meal: any) => (
@@ -10,7 +10,7 @@ function Drinks() {
           <h2>{meal.strDrink}</h2>
           <img
             src={ meal.strDrinkThumb }
-            alt={ meal.strDrink}
+            alt={ meal.strDrink }
           />
         </div>
       ))}

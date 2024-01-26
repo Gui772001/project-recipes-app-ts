@@ -12,7 +12,6 @@ function Provider({ children }: ProviderProps) {
   const [foodData, setFoodData] = useState<[]>([]);
   const [filterDriks, setFilterDriks] = useState('');
   const [foodDataDrinks, setFoodDataDrinks] = useState<[]>([]);
-  
 
   //   const [loginAlertMessage, setLoginAlertMessage] = useState('');
 
@@ -28,7 +27,7 @@ function Provider({ children }: ProviderProps) {
     const fetchDrinks = async () => {
       const resposta = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/${filterDriks}`);
       const resp = await resposta.json();
-      setFoodDataDrinks(resp.drinks)
+      setFoodDataDrinks(resp.drinks);
     };
     fetchDrinks();
   }, [filterDriks]);
@@ -53,8 +52,8 @@ function Provider({ children }: ProviderProps) {
         setFilterDriks,
         filterDriks,
         foodDataDrinks,
-        setFoodDataDrinks
-        
+        setFoodDataDrinks,
+
       } }
     >
       {children}

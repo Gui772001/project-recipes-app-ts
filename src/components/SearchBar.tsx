@@ -4,7 +4,7 @@ import Context from '../context/Context';
 
 function SearchBar() {
   const navigate = useNavigate();
-  const { inputValue, setInputValue ,setFilterDriks} = useContext(Context);
+  const { inputValue, setInputValue, setFilterDriks } = useContext(Context);
   const { setFilter } = useContext(Context);
   const { selectedRadio, setSelectedRadio } = useContext(Context);
   const selectedFirstLetter = (selectedRadio === 'first-letter');
@@ -19,14 +19,14 @@ function SearchBar() {
   const handleSubmit = () => {
     if (selectedRadio === 'ingredient') {
       setFilter(`filter.php?i=${inputValue}`);
-      setFilterDriks(`filter.php?i=${inputValue}`)
+      setFilterDriks(`filter.php?i=${inputValue}`);
     } else if (selectedRadio === 'name') {
       setFilter(`search.php?s=${inputValue}`);
-      setFilterDriks(`search.php?s=${inputValue}`)
+      setFilterDriks(`search.php?s=${inputValue}`);
     } else if (selectedFirstLetter
       && inputValue.length < 2) {
       setFilter(`search.php?f=${inputValue}`);
-      setFilterDriks(`search.php?f=${inputValue}`)
+      setFilterDriks(`search.php?f=${inputValue}`);
     } else if (selectedFirstLetter
     && inputValue.length > 1) {
       return window.alert('Your search must have only 1 (one) character');
