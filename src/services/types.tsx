@@ -3,6 +3,15 @@ export type Usuario = {
   email: string;
   target: string;
 };
+export type FoodDataType = {
+  meals: [
+    {
+      idMeal: string,
+      strMeal: string,
+      strMealThumb: string,
+    },
+  ];
+};
 
 export type ProviderProps = {
   children: React.ReactNode;
@@ -15,4 +24,12 @@ export type ContextType = {
   setPassword: React.Dispatch<React.SetStateAction<string>>;
   isFormValid: boolean,
   setFormValid: React.Dispatch<React.SetStateAction<boolean>>;
+  filter: string,
+  setFilter: React.Dispatch<React.SetStateAction<string>>;
+  inputValue: string,
+  setInputValue: React.Dispatch<React.SetStateAction<string>>;
+  selectedRadio: string,
+  setSelectedRadio: React.Dispatch<React.SetStateAction<string>>;
+  foodData: FoodDataType[],
+  setFoodData: React.Dispatch<React.SetStateAction<[]>>;
 };
