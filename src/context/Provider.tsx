@@ -10,6 +10,9 @@ function Provider({ children }: ProviderProps) {
   const [inputValue, setInputValue] = useState('');
   const [selectedRadio, setSelectedRadio] = useState('');
   const [foodData, setFoodData] = useState<[]>([]);
+  const [filterDriks, setFilterDriks] = useState('');
+  const [foodDataDrinks, setFoodDataDrinks] = useState<[]>([]);
+  
 
   //   const [loginAlertMessage, setLoginAlertMessage] = useState('');
 
@@ -21,6 +24,14 @@ function Provider({ children }: ProviderProps) {
     };
     fetchFood();
   }, [filter]);
+  useEffect(() => {
+    const fetchDrinks = async () => {
+      const resposta = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/${filterDriks}`);
+      const resp = await resposta.json();
+      setFoodDataDrinks(resp.drinks)
+    };
+    fetchDrinks();
+  }, [filterDriks]);
 
   return (
     <Context.Provider
@@ -39,6 +50,11 @@ function Provider({ children }: ProviderProps) {
         setSelectedRadio,
         foodData,
         setFoodData,
+        setFilterDriks,
+        filterDriks,
+        foodDataDrinks,
+        setFoodDataDrinks
+        
       } }
     >
       {children}
