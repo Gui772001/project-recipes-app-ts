@@ -12,6 +12,15 @@ export type FoodDataType = {
     },
   ];
 };
+export type DrinkDataType = {
+  Cocktails: [
+    {
+      idcocktail: string,
+      strcocktail: string,
+      strcocktailThumb: string,
+    },
+  ];
+};
 
 export type ProviderProps = {
   children: React.ReactNode;
@@ -32,4 +41,8 @@ export type ContextType = {
   setSelectedRadio: React.Dispatch<React.SetStateAction<string>>;
   foodData: FoodDataType[],
   setFoodData: React.Dispatch<React.SetStateAction<[]>>;
+  setFilterDriks: React.Dispatch<React.SetStateAction<string>>;
+  filterDriks:string
+  foodDataDrinks :DrinkDataType[]
+  setFoodDataDrinks : React.Dispatch<React.SetStateAction<[]>>
 };
