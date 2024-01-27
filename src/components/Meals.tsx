@@ -4,11 +4,14 @@ import Footer from './Footer';
 
 function Meals() {
   const { foodData } = useContext(Context);
+  // console.log(foodData);
+  // console.log(foodData.length);
 
-  if (foodData.meals.length >= 1) {
+  if (foodData.length >= 1) {
+    // console.log('teste');
     return (
       <div>
-        {foodData.meals.map((meal: any) => (
+        {foodData.map((meal: any) => (
           <div key={ meal.idMeal }>
             <h2>{meal.strMeal}</h2>
             <img

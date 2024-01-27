@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useState } from 'react';
+
 import Context from './Context';
 import { FoodDataType, DrinkDataType, ProviderProps } from '../services/types';
 
@@ -10,9 +10,10 @@ function Provider({ children }: ProviderProps) {
   const [filter, setFilter] = useState('');
   const [inputValue, setInputValue] = useState('');
   const [selectedRadio, setSelectedRadio] = useState('');
-  const [foodData, setFoodData] = useState<FoodDataType>({ meals: [] as any });
-  const [filterDrinks, setFilterDrinks] = useState('');
-  const [drinkData, setDrinkData] = useState<DrinkDataType>([{ Cocktails: [] }] as any);
+  const [foodData, setFoodData] = useState<FoodDataType[]>([]);
+
+  // const [filterDrinks, setFilterDrinks] = useState('');
+  const [drinkData, setDrinkData] = useState<DrinkDataType[]>([]);
   const [category, setCategory] = useState('');
 
   return (
@@ -32,8 +33,8 @@ function Provider({ children }: ProviderProps) {
         setSelectedRadio,
         foodData,
         setFoodData,
-        setFilterDrinks,
-        filterDrinks,
+        // setFilterDrinks,
+        // filterDrinks,
         drinkData,
         setDrinkData,
         category,

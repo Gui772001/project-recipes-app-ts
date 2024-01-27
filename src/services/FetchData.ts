@@ -7,5 +7,6 @@ export const fetchFood = async (filter: string) => {
 export const fetchDrinks = async (filter: string) => {
   const response = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/${filter}`);
   const data = await response.json();
+  console.log(data);
   return (data.drinks);
 };

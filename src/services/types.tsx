@@ -4,14 +4,10 @@ export type Usuario = {
   target: string;
 };
 export type FoodDataType = {
-  meals: [
-    {
-      idMeal: string,
-      strMeal: string,
-      strMealThumb: string,
-      strInstructions: string,
-    },
-  ]
+  idMeal: string,
+  strMeal: string,
+  strMealThumb: string,
+  strInstructions: string,
 };
 
 export type DrinkDataType = {
@@ -42,12 +38,10 @@ export type ContextType = {
   setInputValue: React.Dispatch<React.SetStateAction<string>>;
   selectedRadio: string,
   setSelectedRadio: React.Dispatch<React.SetStateAction<string>>;
-  filterDrinks:string,
-  setFilterDrinks: React.Dispatch<React.SetStateAction<string>>;
   category: string,
   setCategory: React.Dispatch<React.SetStateAction<string>>;
-  foodData: FoodDataType,
-  setFoodData: React.Dispatch<React.SetStateAction<FoodDataType>>;
+  foodData: FoodDataType[],
+  setFoodData: React.Dispatch<React.SetStateAction<FoodDataType[]>>;
   drinkData: DrinkDataType,
   setDrinkData: React.Dispatch<React.SetStateAction<DrinkDataType>>;
 };

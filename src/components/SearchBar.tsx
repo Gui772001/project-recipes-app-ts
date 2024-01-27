@@ -1,13 +1,20 @@
-import { useContext } from 'react';
+import { useCallback, useContext, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Context from '../context/Context';
 import { fetchDrinks, fetchFood } from '../services/FetchData';
 
 function SearchBar() {
   const navigate = useNavigate();
-  const { inputValue, filterDrinks, setInputValue, setFilterDrinks,
-    filter, setFilter, setFoodData,
-    selectedRadio, setSelectedRadio } = useContext(Context);
+  const { inputValue,
+    setInputValue,
+    filter,
+    setFilter,
+    setFoodData,
+    setDrinkData,
+    selectedRadio,
+    setSelectedRadio,
+  } = useContext(Context);
+
   const selectedFirstLetter = (selectedRadio === 'first-letter');
 
   const location = useLocation();
@@ -23,21 +30,18 @@ function SearchBar() {
   const defineFilters = () => {
     if (selectedRadio === 'ingredient') {
       setFilter(`filter.php?i=${inputValue}`);
-      setFilterDrinks(`filter.php?i=${inputValue}`);
     } else if (selectedRadio === 'name') {
       setFilter(`search.php?s=${inputValue}`);
-      setFilterDrinks(`search.php?s=${inputValue}`);
     } else if (selectedFirstLetter
         && inputValue.length < 2) {
       setFilter(`search.php?f=${inputValue}`);
-      setFilterDrinks(`search.php?f=${inputValue}`);
     } else if (selectedFirstLetter
       && inputValue.length > 1) {
       return window.alert('Your search must have only 1 (one) character');
     }
   };
 
-  const handleMealsNavigation = async () => {
+  const handleMealsNavigation = useCallback(async () => {
     const fetchFoodResult = await fetchFood(filter);
     setFoodData(fetchFoodResult);
     if (fetchFoodResult.length > 1) {
@@ -50,10 +54,11 @@ function SearchBar() {
         "Sorry, we haven't found any recipes for these filters",
       );
     }
-  };
+  }, [filter, setFoodData, navigate]);
 
-  const handleDrinksNavigation = async () => {
-    const fetchDrinksResult = await fetchDrinks(filterDrinks);
+  const handleDrinksNavigation = useCallback(async () => {
+    const fetchDrinksResult = await fetchDrinks(filter);
+    setDrinkData(fetchDrinksResult);
     if (fetchDrinksResult.length > 1) {
       navigate('/drinks');
     } else if (fetchDrinksResult.length === 1) {
@@ -64,7 +69,29 @@ function SearchBar() {
         "Sorry, we haven't found any recipes for these filters",
       );
     }
-  };
+  }, [filter, setDrinkData, navigate]);
+
+  useEffect(() => {
+    handleDrinksNavigation();
+  }, [handleDrinksNavigation]);
+
+  useEffect(() => {
+    handleMealsNavigation();
+  }, [handleMealsNavigation]);
+
+  // const handleDrinksNavigation = async () => {
+  //   const fetchDrinksResult = await fetchDrinks(filter);
+  //   if (fetchDrinksResult.length > 1) {
+  //     navigate('/drinks');
+  //   } else if (fetchDrinksResult.length === 1) {
+  //     const { idcocktail } = fetchDrinksResult[0];
+  //     navigate(`/drinks/${idcocktail}`);
+  //   } else if (fetchDrinksResult.length === 0) {
+  //     return window.alert(
+  //       "Sorry, we haven't found any recipes for these filters",
+  //     );
+  //   }
+  // };
 
   const handleSubmit = () => {
     defineFilters();

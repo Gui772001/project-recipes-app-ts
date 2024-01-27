@@ -28,7 +28,6 @@ function Header() {
             alt="searchIcon"
           />
         </button>
-      // </Link>
       )}
       <div>
         {searchBar && (
