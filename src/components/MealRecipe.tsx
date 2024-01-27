@@ -3,10 +3,10 @@ import Context from '../context/Context';
 
 function MealRecipe() {
   const { foodData } = useContext(Context);
-  if (foodData.length === 1) {
+  if (foodData.meals.length === 1) {
     return (
       <div>
-        {foodData.map((meal: any) => (
+        {foodData.meals.map((meal: any) => (
           <div key={ meal.idMeal }>
             <h2>{meal.strMeal}</h2>
             <img
