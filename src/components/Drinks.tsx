@@ -10,7 +10,7 @@ function Drinks() {
     return (
       <div>
         {drinkData.map((meal: any) => (
-          <div key={ meal.idDrinks }>
+          <div key={ meal.strDrink }>
             <h2>{meal.strDrink}</h2>
             <img
               src={ meal.strDrinkThumb }

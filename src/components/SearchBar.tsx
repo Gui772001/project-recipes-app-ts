@@ -15,8 +15,6 @@ function SearchBar() {
     setSelectedRadio,
   } = useContext(Context);
 
-  const selectedFirstLetter = (selectedRadio === 'first-letter');
-
   const location = useLocation();
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,10 +30,10 @@ function SearchBar() {
       setFilter(`filter.php?i=${inputValue}`);
     } else if (selectedRadio === 'name') {
       setFilter(`search.php?s=${inputValue}`);
-    } else if (selectedFirstLetter
+    } else if ((selectedRadio === 'first-letter')
         && inputValue.length < 2) {
       setFilter(`search.php?f=${inputValue}`);
-    } else if (selectedFirstLetter
+    } else if ((selectedRadio === 'first-letter')
       && inputValue.length > 1) {
       return window.alert('Your search must have only 1 (one) character');
     }
@@ -54,7 +52,7 @@ function SearchBar() {
         "Sorry, we haven't found any recipes for these filters",
       );
     }
-  }, [filter, setFoodData, navigate]);
+  }, [filter, setFoodData]);
 
   const handleDrinksNavigation = useCallback(async () => {
     const fetchDrinksResult = await fetchDrinks(filter);
@@ -69,7 +67,7 @@ function SearchBar() {
         "Sorry, we haven't found any recipes for these filters",
       );
     }
-  }, [filter, setDrinkData, navigate]);
+  }, [filter, setDrinkData]);
 
   useEffect(() => {
     handleDrinksNavigation();
@@ -78,20 +76,6 @@ function SearchBar() {
   useEffect(() => {
     handleMealsNavigation();
   }, [handleMealsNavigation]);
-
-  // const handleDrinksNavigation = async () => {
-  //   const fetchDrinksResult = await fetchDrinks(filter);
-  //   if (fetchDrinksResult.length > 1) {
-  //     navigate('/drinks');
-  //   } else if (fetchDrinksResult.length === 1) {
-  //     const { idcocktail } = fetchDrinksResult[0];
-  //     navigate(`/drinks/${idcocktail}`);
-  //   } else if (fetchDrinksResult.length === 0) {
-  //     return window.alert(
-  //       "Sorry, we haven't found any recipes for these filters",
-  //     );
-  //   }
-  // };
 
   const handleSubmit = () => {
     defineFilters();
