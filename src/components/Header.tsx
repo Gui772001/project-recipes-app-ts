@@ -7,7 +7,7 @@ import SearchBar from './SearchBar';
 function Header() {
   const [searchBar, setSearchBar] = useState(false);
   const location = useLocation();
-  const isSearchPage = ['/meals', '/drinks', '/search'].includes(location.pathname);
+  const isSearchPage = ['/meals', '/drinks'].includes(location.pathname);
 
   function handleToggle() {
     setSearchBar((prev) => !prev);
@@ -21,15 +21,14 @@ function Header() {
       </Link>
 
       {isSearchPage && (
-        <Link to="/search">
-          <button onClick={ handleToggle }>
-            <img
-              data-testid="search-top-btn"
-              src={ searchIcon }
-              alt="searchIcon"
-            />
-          </button>
-        </Link>
+        <button onClick={ handleToggle }>
+          <img
+            data-testid="search-top-btn"
+            src={ searchIcon }
+            alt="searchIcon"
+          />
+        </button>
+      // </Link>
       )}
       <div>
         {searchBar && (

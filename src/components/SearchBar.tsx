@@ -1,13 +1,16 @@
 import { useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Context from '../context/Context';
+import { fetchDrinks, fetchFood } from '../services/FetchData';
 
 function SearchBar() {
   const navigate = useNavigate();
-  const { inputValue, setInputValue, setFilterDriks } = useContext(Context);
-  const { setFilter } = useContext(Context);
-  const { selectedRadio, setSelectedRadio } = useContext(Context);
+  const { inputValue, filterDrinks, setInputValue, setFilterDrinks,
+    filter, setFilter, setFoodData,
+    selectedRadio, setSelectedRadio } = useContext(Context);
   const selectedFirstLetter = (selectedRadio === 'first-letter');
+
+  const location = useLocation();
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
@@ -16,22 +19,60 @@ function SearchBar() {
   const handleRadioChange = (event: React.ChangeEvent<HTMLElement>) => {
     setSelectedRadio(event.target.title);
   };
-  const handleSubmit = () => {
+
+  const defineFilters = () => {
     if (selectedRadio === 'ingredient') {
       setFilter(`filter.php?i=${inputValue}`);
-      setFilterDriks(`filter.php?i=${inputValue}`);
+      setFilterDrinks(`filter.php?i=${inputValue}`);
     } else if (selectedRadio === 'name') {
       setFilter(`search.php?s=${inputValue}`);
-      setFilterDriks(`search.php?s=${inputValue}`);
+      setFilterDrinks(`search.php?s=${inputValue}`);
     } else if (selectedFirstLetter
-      && inputValue.length < 2) {
+        && inputValue.length < 2) {
       setFilter(`search.php?f=${inputValue}`);
-      setFilterDriks(`search.php?f=${inputValue}`);
+      setFilterDrinks(`search.php?f=${inputValue}`);
     } else if (selectedFirstLetter
-    && inputValue.length > 1) {
+      && inputValue.length > 1) {
       return window.alert('Your search must have only 1 (one) character');
     }
-    navigate('/drinks', { replace: true });
+  };
+
+  const handleMealsNavigation = async () => {
+    const fetchFoodResult = await fetchFood(filter);
+    setFoodData(fetchFoodResult);
+    if (fetchFoodResult.length > 1) {
+      navigate('/meals');
+    } else if (fetchFoodResult.length === 1) {
+      const { idMeal } = fetchFoodResult[0];
+      navigate(`/meals/${idMeal}`);
+    } else if (fetchFoodResult.length === 0) {
+      return window.alert(
+        "Sorry, we haven't found any recipes for these filters",
+      );
+    }
+  };
+
+  const handleDrinksNavigation = async () => {
+    const fetchDrinksResult = await fetchDrinks(filterDrinks);
+    if (fetchDrinksResult.length > 1) {
+      navigate('/drinks');
+    } else if (fetchDrinksResult.length === 1) {
+      const { idcocktail } = fetchDrinksResult[0];
+      navigate(`/drinks/${idcocktail}`);
+    } else if (fetchDrinksResult.length === 0) {
+      return window.alert(
+        "Sorry, we haven't found any recipes for these filters",
+      );
+    }
+  };
+
+  const handleSubmit = () => {
+    defineFilters();
+    if (location.pathname === '/meals') {
+      handleMealsNavigation();
+    } else if (location.pathname === '/drinks') {
+      handleDrinksNavigation();
+    }
   };
 
   return (
@@ -53,7 +94,7 @@ function SearchBar() {
         <input
           title="ingredient"
           type="radio"
-          name="ingredient"
+          name="select-radio"
           data-testid="ingredient-search-radio"
           onChange={ handleRadioChange }
         />
@@ -64,7 +105,7 @@ function SearchBar() {
         <input
           title="name"
           type="radio"
-          name="name"
+          name="select-radio"
           data-testid="name-search-radio"
           onChange={ handleRadioChange }
         />
@@ -75,7 +116,7 @@ function SearchBar() {
         <input
           title="first-letter"
           type="radio"
-          name="first-letter"
+          name="select-radio"
           data-testid="first-letter-search-radio"
           onChange={ handleRadioChange }
         />

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import Context from './Context';
-import { ProviderProps } from '../services/types';
+import { FoodDataType, DrinkDataType, ProviderProps } from '../services/types';
 
 function Provider({ children }: ProviderProps) {
   const [email, setEmail] = useState('');
@@ -9,28 +10,10 @@ function Provider({ children }: ProviderProps) {
   const [filter, setFilter] = useState('');
   const [inputValue, setInputValue] = useState('');
   const [selectedRadio, setSelectedRadio] = useState('');
-  const [foodData, setFoodData] = useState<[]>([]);
-  const [filterDriks, setFilterDriks] = useState('');
-  const [foodDataDrinks, setFoodDataDrinks] = useState<[]>([]);
-
-  //   const [loginAlertMessage, setLoginAlertMessage] = useState('');
-
-  useEffect(() => {
-    const fetchFood = async () => {
-      const response = await fetch(`https://www.themealdb.com/api/json/v1/1/${filter}`);
-      const data = await response.json();
-      setFoodData(data.meals);
-    };
-    fetchFood();
-  }, [filter]);
-  useEffect(() => {
-    const fetchDrinks = async () => {
-      const resposta = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/${filterDriks}`);
-      const resp = await resposta.json();
-      setFoodDataDrinks(resp.drinks);
-    };
-    fetchDrinks();
-  }, [filterDriks]);
+  const [foodData, setFoodData] = useState<FoodDataType>({ meals: [] as any });
+  const [filterDrinks, setFilterDrinks] = useState('');
+  const [drinkData, setDrinkData] = useState<DrinkDataType>([{ Cocktails: [] }] as any);
+  const [category, setCategory] = useState('');
 
   return (
     <Context.Provider
@@ -49,10 +32,12 @@ function Provider({ children }: ProviderProps) {
         setSelectedRadio,
         foodData,
         setFoodData,
-        setFilterDriks,
-        filterDriks,
-        foodDataDrinks,
-        setFoodDataDrinks,
+        setFilterDrinks,
+        filterDrinks,
+        drinkData,
+        setDrinkData,
+        category,
+        setCategory,
 
       } }
     >
