@@ -1,0 +1,16 @@
+.footer {
+  position: fixed;
+  flex-shrink: 0;
+  justify-content: center;
+  align-items: center;
+  background-color: #f0f0f0;
+  height: 60px;
+}
+
+.container-footer {
+  display: flex;
+  flex-direction:row;
+  justify-content:center;
+  align-items:flex-end;
+  
+}

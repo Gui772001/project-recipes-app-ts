@@ -1,8 +1,10 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useState } from 'react';
-import profileIcon from '../images/profileIcon.svg';
-import searchIcon from '../images/searchIcon.svg';
-import SearchBar from './SearchBar';
+import profileIcon from '../../images/profileIcon.svg';
+import searchIcon from '../../images/searchIcon.svg';
+import SearchBar from '../searchBar/SearchBar';
+import { getPageTitle } from '../../services/functions';
+import './index.css';
 
 function Header() {
   const [searchBar, setSearchBar] = useState(false);
@@ -17,11 +19,19 @@ function Header() {
     <header>
       <h1 data-testid="page-title">{getPageTitle(location.pathname)}</h1>
       <Link to="/profile">
-        <img data-testid="profile-top-btn" src={ profileIcon } alt="Profile Icon" />
+        <img
+          data-testid="profile-top-btn"
+          src={ profileIcon }
+          alt="Profile Icon"
+          className="img-search-button"
+        />
       </Link>
 
       {isSearchPage && (
-        <button onClick={ handleToggle }>
+        <button
+          onClick={ handleToggle }
+          className="search-button"
+        >
           <img
             data-testid="search-top-btn"
             src={ searchIcon }
@@ -37,24 +47,5 @@ function Header() {
     </header>
   );
 }
-
-const getPageTitle = (pathname: string) => {
-  switch (pathname) {
-    case '/meals':
-      return 'Meals';
-    case '/drinks':
-      return 'Drinks';
-    case '/profile':
-      return 'Profile';
-    case '/done-recipes':
-      return 'Done Recipes';
-    case '/favorite-recipes':
-      return 'Favorite Recipes';
-    case '/search':
-      return 'Search';
-    default:
-      return 'Título';
-  }
-};
 
 export default Header;

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import './index.css';
 
 function Footer() {
   const navigate = useNavigate();
@@ -13,12 +14,11 @@ function Footer() {
   };
 
   return (
-    <div>
+    <div className="container-footer">
       <h1>Footer</h1>
       <button
         onClick={ handleMealsClick }
       >
-
         <img
           src="./src/images/mealIcon.svg"
           alt="mealIcon"
@@ -32,7 +32,6 @@ function Footer() {
           src="./src/images/drinkIcon.svg"
           alt="drinksIcon"
           data-testid="drinks-bottom-btn"
-
         />
       </button>
     </div>

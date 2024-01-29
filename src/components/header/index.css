@@ -1,0 +1,11 @@
+.search-button {
+  border-radius: 5px;
+  margin-bottom: 10px;
+  cursor: pointer;
+ 
+}
+.img-search-button {
+  padding: 10px;
+  border-radius: 10px;
+  margin-left: 10px;
+}

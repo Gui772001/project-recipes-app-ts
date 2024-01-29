@@ -1,17 +1,17 @@
 import React from 'react';
 import './App.css';
 import { Routes, Route } from 'react-router-dom';
-import Login from './components/Login';
-import Meals from './components/Meals';
-import Drinks from './components/Drinks';
-import Profile from './components/Profile';
-import DoneRecipes from './components/DoneRecipes';
-import FavoriteRecipes from './components/FavoriteRecipes';
-import Header from './components/Header';
+import Login from './components/login/Login';
+import Meals from './components/Meals/Meals';
+import Drinks from './components/drinks/Drinks';
+import Profile from './components/profile/Profile';
+import DoneRecipes from './components/doneRecipes/DoneRecipes';
+import FavoriteRecipes from './components/favoriteRecipes/FavoriteRecipes';
+import Header from './components/header/Header';
 import Provider from './context/Provider';
-import MealRecipe from './components/MealRecipe';
-import Recipes from './components/Recipes';
-import DrinkRecipe from './components/DrinkRecipe';
+import MealRecipe from './components/mealRecipe/MealRecipe';
+import Recipes from './components/recipes/Recipes';
+import DrinkRecipe from './components/drinkRecipe/DrinkRecipe';
 
 function App() {
   return (

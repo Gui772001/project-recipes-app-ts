@@ -1,45 +1,32 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import Context from './Context';
-import { FoodDataType, DrinkDataType, ProviderProps } from '../services/types';
+import { ProviderProps, InitialFilterType } from '../services/types';
+import useFetch from '../components/hook/useFetch';
 
 function Provider({ children }: ProviderProps) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [isFormValid, setFormValid] = useState(false);
-  const [filter, setFilter] = useState('');
-  const [inputValue, setInputValue] = useState('');
-  const [selectedRadio, setSelectedRadio] = useState('');
-  const [foodData, setFoodData] = useState<FoodDataType[]>([]);
+  const initialfilter = {
+    input: '',
+    radio: '',
+  };
+  const [filter, setFilter] = useState<InitialFilterType>(initialfilter);
+  const { data, loading } = useFetch(filter);
 
-  // const [filterDrinks, setFilterDrinks] = useState('');
-  const [drinkData, setDrinkData] = useState<DrinkDataType[]>([]);
-  const [category, setCategory] = useState('');
+  console.log(loading);
+  console.log(data);
+  console.log(filter);
+
+  useEffect(() => {
+  }, [filter, data]);
 
   return (
     <Context.Provider
       value={ {
-        email,
-        setEmail,
-        password,
-        setPassword,
-        isFormValid,
-        setFormValid,
+        data,
+        loading,
         filter,
         setFilter,
-        inputValue,
-        setInputValue,
-        selectedRadio,
-        setSelectedRadio,
-        foodData,
-        setFoodData,
-        // setFilterDrinks,
-        // filterDrinks,
-        drinkData,
-        setDrinkData,
-        category,
-        setCategory,
-
+        initialfilter,
       } }
     >
       {children}
