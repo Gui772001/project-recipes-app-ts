@@ -8,7 +8,10 @@ import Profile from './components/Profile';
 import DoneRecipes from './components/DoneRecipes';
 import FavoriteRecipes from './components/FavoriteRecipes';
 import Header from './components/Header';
-import Provider from './context/Provider';
+import Provider from './helpers/context/Provider';
+import MealRecipe from './components/MealRecipe';
+import Recipes from './components/Recipes';
+import DrinkRecipe from './components/DrinkRecipe';
 
 function App() {
   return (
@@ -17,10 +20,10 @@ function App() {
         <Header />
         <Routes>
           <Route path="/" element={ <Login /> } />
-          <Route path="/meals" element={ <Meals /> } />
-          <Route path="/drinks" element={ <Drinks /> } />
-          <Route path="/meals/:id" element={ <Meals /> } />
-          <Route path="/drinks/:id" element={ <Drinks /> } />
+          <Route path="/meals" element={ <Recipes /> } />
+          <Route path="/drinks" element={ <Recipes /> } />
+          <Route path="/meals/:id" element={ <MealRecipe /> } />
+          <Route path="/drinks/:id" element={ <DrinkRecipe /> } />
           <Route path="/meals/:id/in-progress" element={ <Meals /> } />
           <Route path="/drinks/:id/in-progress" element={ <Drinks /> } />
           <Route path="/profile" element={ <Profile /> } />
