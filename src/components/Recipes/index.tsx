@@ -1,8 +1,8 @@
 import { useLocation, useParams } from 'react-router-dom';
-import Meals from '../Meals/Meals';
-import Drinks from '../drinks/Drinks';
-import MealRecipe from '../mealRecipe/MealRecipe';
-import DrinkRecipe from '../drinkRecipe/DrinkRecipe';
+import Meals from '../Meals';
+import Drinks from '../Drinks';
+import MealRecipe from '../MealRecipe';
+import DrinkRecipe from '../DrinkRecipe';
 
 function Recipes() {
   const location = useLocation();

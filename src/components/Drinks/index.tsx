@@ -1,7 +1,7 @@
 import { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Context from '../../context/Context';
-import Footer from '../footer/Footer';
+import Context from '../../helpers/context/Context';
+import Footer from '../Footer';
 import './index.css';
 
 function Drinks() {

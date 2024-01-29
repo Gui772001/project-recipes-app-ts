@@ -1,8 +1,8 @@
 import { useState } from 'react';
 
 import Context from './Context';
-import { ProviderProps, InitialFilterType } from '../services/types';
-import useFetch from '../components/hook/useFetch';
+import { ProviderProps, InitialFilterType } from '../../services/types';
+import useFetch from '../hooks/useFetch';
 
 function Provider({ children }: ProviderProps) {
   const initialfilter = {

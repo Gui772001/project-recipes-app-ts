@@ -3,7 +3,7 @@ import '@testing-library/jest-dom/extend-expect';
 import { BrowserRouter } from 'react-router-dom';
 import renderWithRouter from '../renderWithRouter';
 import App from '../App';
-import Header from '../components/header/Header';
+import Header from '../components/Header';
 
 const INPUT_PASSWORD = 'password-input';
 const INPUT_EMAIL = 'email-input';

@@ -1,4 +1,4 @@
-import Footer from '../footer/Footer';
+import Footer from '../Footer';
 
 function Profile() {
   return (

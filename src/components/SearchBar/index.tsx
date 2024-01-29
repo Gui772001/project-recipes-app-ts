@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import Context from '../../context/Context';
+import Context from '../../helpers/context/Context';
 import { InitialFilterType } from '../../services/types';
 
 function SearchBar() {

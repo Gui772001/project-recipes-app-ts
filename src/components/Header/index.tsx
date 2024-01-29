@@ -2,7 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 import profileIcon from '../../images/profileIcon.svg';
 import searchIcon from '../../images/searchIcon.svg';
-import SearchBar from '../searchBar/SearchBar';
+import SearchBar from '../SearchBar';
 import { getPageTitle } from '../../services/functions';
 import './index.css';
 
