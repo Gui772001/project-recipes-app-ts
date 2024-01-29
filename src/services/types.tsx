@@ -3,7 +3,7 @@ export type ProviderProps = {
 };
 
 export type ContextType = {
-  data: FoodType[] | DrinkType[],
+  data: FoodType[] | DrinkType[] | any,
   loading: boolean,
   filter: InitialFilterType,
   setFilter: (filter: any) => void;

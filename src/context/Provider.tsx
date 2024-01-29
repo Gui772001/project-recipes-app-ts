@@ -10,14 +10,7 @@ function Provider({ children }: ProviderProps) {
     radio: '',
   };
   const [filter, setFilter] = useState<InitialFilterType>(initialfilter);
-  const { data, loading } = useFetch(filter); // useEffect é chamado toda vez que altera o filter
-
-  // console.log(loading);
-  // console.log(data);
-  // console.log(filter);
-
-  // useEffect(() => {
-  // }, [filter, data]); -> não está fazendo nada
+  const { data, loading } = useFetch(filter);
 
   return (
     <Context.Provider
