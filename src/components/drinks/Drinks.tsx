@@ -19,13 +19,21 @@ function Drinks() {
   return (
     <div>
       { data.drinks && data.drinks.length > 1
-        && data.drinks.map((drink: any) => (
-          <div key={ drink.strDrink }>
-            <h2>{drink.strDrink}</h2>
+        && data.drinks.slice(0, 12).map((drink: any, index: number) => (
+          <div
+            key={ drink.strDrink }
+            data-testid={ `${index}-recipe-card` }
+          >
+            <h2
+              data-testid={ `${index}-card-name` }
+            >
+              {drink.strDrink}
+            </h2>
             <img
               src={ drink.strDrinkThumb }
               alt={ drink.strDrink }
               style={ { width: '350px' } }
+              data-testid={ `${index}-card-img` }
             />
           </div>
         ))}

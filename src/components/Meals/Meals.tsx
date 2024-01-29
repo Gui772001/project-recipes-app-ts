@@ -17,16 +17,25 @@ function Meals() {
   }, [data, loading, navigate]);
 
   return (
+
     <div>
       <div>
         { data.meals && data.meals.length > 1
-        && data.meals.map((meal: any) => (
-          <div key={ meal.idMeal }>
-            <h2>{meal.strMeal}</h2>
+        && data.meals.slice(0, 12).map((meal: any, index: number) => (
+          <div
+            key={ meal.idMeal }
+            data-testid={ `${index}-recipe-card` }
+          >
+            <h2
+              data-testid={ `${index}-card-name` }
+            >
+              {meal.strMeal}
+            </h2>
             <img
               src={ meal.strMealThumb }
               alt={ meal.strMeal }
               style={ { width: '350px' } }
+              data-testid={ `${index}-card-img` }
             />
           </div>
         ))}
