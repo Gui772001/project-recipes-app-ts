@@ -6,14 +6,15 @@ import './index.css';
 
 function Drinks() {
   const navigate = useNavigate();
-  const { data } = useContext(Context);
+  const { data, loading } = useContext(Context);
+  console.log(data);
 
   useEffect(() => {
-    if (data && data.length === 1) {
+    if (data && data.drinks && data.drinks.length === 1) {
       const { idDrink } = data.drinks[0];
-      navigate(`/drink/${idDrink}`);
+      navigate(`/drinks/${idDrink}`);
     }
-  }, [data, navigate]);
+  }, [data, loading, navigate]);
 
   return (
     <div>
@@ -24,6 +25,7 @@ function Drinks() {
             <img
               src={ drink.strDrinkThumb }
               alt={ drink.strDrink }
+              style={ { width: '350px' } }
             />
           </div>
         ))}

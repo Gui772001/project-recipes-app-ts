@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import Context from './Context';
 import { ProviderProps, InitialFilterType } from '../services/types';
@@ -10,14 +10,14 @@ function Provider({ children }: ProviderProps) {
     radio: '',
   };
   const [filter, setFilter] = useState<InitialFilterType>(initialfilter);
-  const { data, loading } = useFetch(filter);
+  const { data, loading } = useFetch(filter); // useEffect é chamado toda vez que altera o filter
 
-  console.log(loading);
-  console.log(data);
-  console.log(filter);
+  // console.log(loading);
+  // console.log(data);
+  // console.log(filter);
 
-  useEffect(() => {
-  }, [filter, data]);
+  // useEffect(() => {
+  // }, [filter, data]); -> não está fazendo nada
 
   return (
     <Context.Provider
