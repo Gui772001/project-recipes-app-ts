@@ -1,18 +1,21 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
-import { BrowserRouter } from 'react-router-dom';
+import userEvent from '@testing-library/user-event';
+import { vi } from 'vitest';
 import renderWithRouter from '../renderWithRouter';
 import App from '../App';
-import Header from '../components/Header';
 
+const emailTest = 'test@example.com';
+const passwordTest = 'passwordTest';
 const INPUT_PASSWORD = 'password-input';
 const INPUT_EMAIL = 'email-input';
 const LOGIN_SUBMIT_BUTTON = 'login-submit-btn';
 const SEARCH_TEST_ID = 'search-top-btn';
 const SEARCH_INPUT_TEST_ID = 'search-input';
+const SEARCH_BTN = 'exec-search-btn';
 
 describe('App', () => {
-  test('Renderiza corretamente', () => {
+  it('Renderiza corretamente', () => {
     renderWithRouter(<App />, { route: '/' });
     const inputEmail = screen.getByTestId(INPUT_EMAIL);
     const inputPassword = screen.getByTestId(INPUT_PASSWORD);
@@ -23,47 +26,47 @@ describe('App', () => {
     expect(submitBtn).toBeInTheDocument();
   });
 
-  test('Desabilita o botão ao iniciar', () => {
+  it('Desabilita o botão ao iniciar', () => {
     renderWithRouter(<App />, { route: '/' });
     const submitBtn = screen.getByTestId(LOGIN_SUBMIT_BUTTON);
 
     expect(submitBtn).toBeDisabled();
   });
 
-  test('Habilita o botão quando email e senha são válidos', () => {
+  it('Habilita o botão quando email e senha são válidos', () => {
     renderWithRouter(<App />, { route: '/' });
     const inputEmail = screen.getByTestId(INPUT_EMAIL);
     const inputPassword = screen.getByTestId(INPUT_PASSWORD);
     const submitBtn = screen.getByTestId(LOGIN_SUBMIT_BUTTON);
 
-    fireEvent.change(inputEmail, { target: { value: 'test@example.com' } });
-    fireEvent.change(inputPassword, { target: { value: 'password123' } });
+    fireEvent.change(inputEmail, { target: { value: emailTest } });
+    fireEvent.change(inputPassword, { target: { value: passwordTest } });
     expect(submitBtn).toBeEnabled();
   });
 
-  test('Desabilita o botão quando o email é inválido', () => {
+  it('Desabilita o botão quando o email é inválido', () => {
     renderWithRouter(<App />, { route: '/' });
     const inputEmail = screen.getByTestId(INPUT_EMAIL);
     const inputPassword = screen.getByTestId(INPUT_PASSWORD);
     const submitBtn = screen.getByTestId(LOGIN_SUBMIT_BUTTON);
 
     fireEvent.change(inputEmail, { target: { value: 'invalid-email' } });
-    fireEvent.change(inputPassword, { target: { value: 'password123' } });
+    fireEvent.change(inputPassword, { target: { value: passwordTest } });
     expect(submitBtn).toBeDisabled();
   });
 
-  test('Desabilita o botão quando a senha tem menos de 6 caracteres', () => {
+  it('Desabilita o botão quando a senha tem menos de 6 caracteres', () => {
     renderWithRouter(<App />, { route: '/' });
     const inputEmail = screen.getByTestId(INPUT_EMAIL);
     const inputPassword = screen.getByTestId(INPUT_PASSWORD);
     const submitBtn = screen.getByTestId(LOGIN_SUBMIT_BUTTON);
 
-    fireEvent.change(inputEmail, { target: { value: 'test@example.com' } });
+    fireEvent.change(inputEmail, { target: { value: emailTest } });
     fireEvent.change(inputPassword, { target: { value: 'pass' } });
     expect(submitBtn).toBeDisabled();
   });
 
-  test('Exibe mensagem de erro ao fornecer um email inválido', () => {
+  it('Exibe mensagem de erro ao fornecer um email inválido', () => {
     renderWithRouter(<App />, { route: '/' });
     const inputEmail = screen.getByTestId(INPUT_EMAIL);
 
@@ -71,7 +74,7 @@ describe('App', () => {
     expect(screen.getByText('Senha mínima 7 caracteres.')).toBeInTheDocument();
   });
 
-  test('Exibe mensagem de erro ao fornecer uma senha curta', () => {
+  it('Exibe mensagem de erro ao fornecer uma senha curta', () => {
     renderWithRouter(<App />, { route: '/' });
 
     const inputPassword = screen.getByTestId(INPUT_PASSWORD);
@@ -80,19 +83,19 @@ describe('App', () => {
     expect(screen.getByText('Email ou senha inválidos.')).toBeInTheDocument();
   });
 
-  test('Salva informações no localStorage de acordo com o login e senha', () => {
+  it('Salva informações no localStorage de acordo com o login e senha', () => {
     renderWithRouter(<App />, { route: '/' });
     const inputEmail = screen.getByTestId(INPUT_EMAIL);
     const inputPassword = screen.getByTestId(INPUT_PASSWORD);
     const submitBtn = screen.getByTestId(LOGIN_SUBMIT_BUTTON);
 
-    fireEvent.change(inputEmail, { target: { value: 'teste@teste.com' } });
-    fireEvent.change(inputPassword, { target: { value: '1234567' } });
+    fireEvent.change(inputEmail, { target: { value: emailTest } });
+    fireEvent.change(inputPassword, { target: { value: passwordTest } });
     fireEvent.click(submitBtn);
 
     const lsUser = localStorage.getItem('user');
 
-    expect(lsUser).toBe('{"email":"teste@teste.com"}');
+    expect(lsUser).toBe('{"email":"test@example.com"}');
   });
 });
 
@@ -143,47 +146,53 @@ describe('Header', () => {
     const tittle = screen.getByRole('heading', { name: 'Search', level: 1 });
     expect(tittle).toBeInTheDocument();
   });
-  it('O cabeçalho renderiza os botões de perfil e pesquisa corretamente', () => {
-    render(
-      <BrowserRouter>
-        <Header />
-      </BrowserRouter>,
-    );
+  it('Verifica se os radios sao clicaveis', async () => {
+    const mockValue = {
+      meals: null,
+    };
+    const fetchResovedValue = {
+      json: async () => mockValue,
+    } as Response;
+    vi.spyOn(global, 'fetch')
+      .mockResolvedValue(fetchResovedValue);
+    renderWithRouter(<App />, { route: '/meals' });
+
+    const searchBbtn = screen.getByTestId(SEARCH_TEST_ID);
+    await userEvent.click(searchBbtn);
+    const SearchExecBTN = screen.getByTestId(SEARCH_BTN);
+    const radios = screen.getAllByRole('radio');
+    await userEvent.click(radios[0]);
+    await userEvent.click(SearchExecBTN);
+    await userEvent.click(radios[1]);
+    await userEvent.click(SearchExecBTN);
+    await userEvent.click(radios[2]);
+    await userEvent.click(SearchExecBTN);
+  });
+  it('Verifica o cabeçalho renderiza os botões de perfil e pesquisa corretamente', () => {
+    renderWithRouter(<App />, { route: '/meals' });
     const profileButton = screen.getByTestId('profile-top-btn');
     expect(profileButton).toBeInTheDocument();
     const searchButton = screen.getByTestId(SEARCH_TEST_ID);
     expect(searchButton).toBeInTheDocument();
   });
 
-  it('A entrada de pesquisa é exibida quando o botão de pesquisa é clicado', () => {
-    render(
-      <BrowserRouter>
-        <Header />
-      </BrowserRouter>,
-    );
-
+  it('Verifica a entrada de pesquisa é exibida quando o botão de pesquisa é clicado', () => {
+    renderWithRouter(<App />, { route: '/meals' });
     const searchInput = screen.queryByTestId(SEARCH_INPUT_TEST_ID);
     expect(searchInput).not.toBeInTheDocument();
-
     const searchButton = screen.getByTestId(SEARCH_TEST_ID);
     fireEvent.click(searchButton);
-
     const updatedSearchInput = screen.getByTestId(SEARCH_INPUT_TEST_ID);
     expect(updatedSearchInput).toBeInTheDocument();
   });
   it('Verirfica os itens da searchBar quando o botão de pesquisa é clicado', () => {
-    render(
-      <BrowserRouter>
-        <Header />
-      </BrowserRouter>,
-    );
+    renderWithRouter(<App />, { route: '/meals' });
     const buttonSearch = screen.getByTestId(SEARCH_TEST_ID);
     fireEvent.click(buttonSearch);
     const inputSearch = screen.getByTestId(SEARCH_INPUT_TEST_ID);
     const ingredient = screen.getByTestId('ingredient-search-radio');
     const nameSearch = screen.getByTestId('name-search-radio');
     const firstLetter = screen.getByTestId('first-letter-search-radio');
-
     expect(inputSearch).toBeInTheDocument();
     expect(ingredient).toBeInTheDocument();
     expect(nameSearch).toBeInTheDocument();
