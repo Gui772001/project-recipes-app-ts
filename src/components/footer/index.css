@@ -1,10 +1,10 @@
 .footer {
   align-items: center;
   background-color: #f0f0f0;
-  position: fixed;
   flex-shrink: 0;
   height: 60px;
   justify-content: center;
+  position: fixed;
 }
 
 .container-footer {
