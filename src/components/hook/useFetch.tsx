@@ -18,8 +18,8 @@ function useFetch(filter: InitialFilterType) {
       const apiURL = buildURL(filter, currentPath);
       const response = await fetch(apiURL);
       const result = await response.json();
-      if (result === null) {
-        window.alert("Sorry, we haven't found any recipes for these filters");
+      if (result.meals === null || result.drinks === null) {
+        window.alert('Sorry, we haven\'t found any recipes for these filters');
       }
       setData(result);
       setLoading(false);
