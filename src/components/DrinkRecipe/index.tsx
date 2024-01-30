@@ -14,6 +14,7 @@ type Drink = {
 function DrinkRecipe() {
   const { data } = useContext(Context);
   const [drink, setDrink] = useState<Drink | null>(null);
+  const [meals, setMeals] = useState([]);
 
   const location = useLocation();
   const currentPath = location.pathname;
@@ -23,6 +24,12 @@ function DrinkRecipe() {
   if (category === 'drink') {
     category = 'cocktail';
   }
+
+  useEffect(() => {
+    fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=')
+      .then((response) => response.json())
+      .then((mealData) => setMeals(mealData.meals));
+  }, []);
 
   useEffect(() => {
     if (data.length === 0 || currentPath.includes(`/drinks/${urlId}`)) {

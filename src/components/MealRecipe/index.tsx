@@ -15,12 +15,19 @@ type Meal = {
 function MealRecipe() {
   const { data } = useContext(Context);
   const [meal, setMeal] = useState<Meal | null>(null);
+  const [drinks, setDrinks] = useState([]);
 
   const location = useLocation();
   const currentPath = location.pathname;
   const pathSegments = currentPath.split('/');
   const category = pathSegments[1].slice(0, -1);
   const urlId = pathSegments[2];
+
+  useEffect(() => {
+    fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=')
+      .then((response) => response.json())
+      .then((drinkData) => setDrinks(drinkData.drinks));
+  }, []);
 
   useEffect(() => {
     if (data.length === 0 || currentPath.includes(`/meals/${urlId}`)) {
