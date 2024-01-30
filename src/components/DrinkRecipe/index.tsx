@@ -7,6 +7,8 @@ type Drink = {
   strDrink: string;
   strDrinkThumb: string;
   strInstructions: string;
+  strCategory: string;
+  strAlcoholic: string;
 };
 
 function DrinkRecipe() {
@@ -15,18 +17,17 @@ function DrinkRecipe() {
 
   const location = useLocation();
   const currentPath = location.pathname;
+  const pathSegments = currentPath.split('/');
+  let category = pathSegments[1].slice(0, -1);
+  const urlId = pathSegments[2];
+  if (category === 'drink') {
+    category = 'cocktail';
+  }
 
   useEffect(() => {
-    if (data.length === 0 && currentPath !== '/meals' && currentPath !== '/drinks') {
+    if (data.length === 0 || currentPath.includes(`/drinks/${urlId}`)) {
       const fetchData = async () => {
-        const pathSegments = currentPath.split('/');
-        let category = pathSegments[1].slice(0, -1);
-        const urlId = pathSegments[2];
-        if (category === 'drink') {
-          category = 'cocktail';
-        }
         const apiURL = `https://www.the${category}db.com/api/json/v1/1/lookup.php?i=${urlId}`;
-        console.log(apiURL);
         const response = await fetch(apiURL);
         const result = await response.json();
         console.log(result);
@@ -36,22 +37,63 @@ function DrinkRecipe() {
     } else {
       setDrink(data.drinks[0]);
     }
-  }, [data]);
+  }, [data, currentPath]);
 
   if (!drink) {
     return <div>Loading...</div>;
   }
 
+  const getIngredients = (drinks: any) => {
+    const ingredients = [];
+    for (let i = 1; i <= 15; i += 1) {
+      const ingredient = drinks[`strIngredient${i}`];
+      const measure = drinks[`strMeasure${i}`];
+      if (ingredient) {
+        ingredients.push(`${ingredient} - ${measure}`);
+      }
+    }
+    return ingredients;
+  };
+
+  const ingredients = drink ? getIngredients(drink) : [];
+
   return (
     <div>
       <div key={ drink.idDrink }>
-        <h2>{drink.strDrink}</h2>
+        <h2
+          data-testid="recipe-title"
+        >
+          {drink.strDrink}
+        </h2>
+        <h3>Category:</h3>
+        <p
+          data-testid="recipe-category"
+        >
+          {drink.strAlcoholic}
+        </p>
         <img
           src={ drink.strDrinkThumb }
           alt={ drink.strDrink }
           style={ { width: '350px' } }
+          data-testid="recipe-photo"
         />
-        <p>{drink.strInstructions}</p>
+        <h3>Ingredients:</h3>
+        <ul>
+          {ingredients.map((ingredient, index) => (
+            <li
+              key={ index }
+              data-testid={ `${index}-ingredient-name-and-measure` }
+            >
+              {ingredient}
+            </li>
+          ))}
+        </ul>
+        <h3>Instructions:</h3>
+        <p
+          data-testid="instructions"
+        >
+          {drink.strInstructions}
+        </p>
       </div>
     </div>
   );
