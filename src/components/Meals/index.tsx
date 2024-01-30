@@ -17,6 +17,7 @@ function Meals() {
   }, [data, loading, navigate]);
 
   function handleCard(idMeal: number) {
+    console.log(idMeal);
     navigate(`/meals/${idMeal}`);
   }
 

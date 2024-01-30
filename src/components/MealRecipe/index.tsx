@@ -1,16 +1,9 @@
 import React, { useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+
 import Context from '../../helpers/context/Context';
 
 function MealRecipe() {
-  const navigate = useNavigate();
-
   const { data } = useContext(Context);
-
-  if (!data.meals || data.meals.length !== 1) {
-    navigate('/meals');
-    return null;
-  }
 
   const meal = data.meals[0];
 
