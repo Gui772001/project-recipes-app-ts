@@ -11,6 +11,7 @@ function Provider({ children }: ProviderProps) {
   };
   const [filter, setFilter] = useState<InitialFilterType>(initialfilter);
   const { data, loading } = useFetch(filter);
+  console.log(filter);
 
   return (
     <Context.Provider

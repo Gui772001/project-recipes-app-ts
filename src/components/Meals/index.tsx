@@ -25,7 +25,7 @@ function Meals() {
         { data.meals && data.meals.length > 1
         && data.meals.slice(0, 12).map((meal: any, index: number) => (
           <div
-            key={ meal.idMeal }
+            key={ index }
             data-testid={ `${index}-recipe-card` }
           >
             <h2

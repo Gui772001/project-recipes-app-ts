@@ -8,7 +8,6 @@ import FastButtons from '../FastButtons';
 function Drinks() {
   const navigate = useNavigate();
   const { data, loading } = useContext(Context);
-  console.log(data);
 
   useEffect(() => {
     if (data && data.drinks && data.drinks.length === 1) {
