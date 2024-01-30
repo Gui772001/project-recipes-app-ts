@@ -126,6 +126,13 @@ function DrinkRecipe() {
           ))}
         </div>
       </div>
+      <button
+        type="button"
+        data-testid="start-recipe-btn"
+        style={ { position: 'fixed', bottom: '0', left: '0', width: '100%' } }
+      >
+        Start Recipe
+      </button>
     </div>
   );
 }
