@@ -198,4 +198,43 @@ describe('Header', () => {
     expect(nameSearch).toBeInTheDocument();
     expect(firstLetter).toBeInTheDocument();
   });
+  
+  it('verifica se exibe um alert quando o input tem mais de 1 caractere no filtro first Letter', () => {
+    renderWithRouter(<App />, { route: '/meals' });
+
+    const buttonSearch = screen.getByTestId(SEARCH_TEST_ID);
+    fireEvent.click(buttonSearch);
+
+    const inputSearch = screen.getByTestId(SEARCH_INPUT_TEST_ID);
+    fireEvent.change(inputSearch, { target: { value: 'aa' } });
+
+    const firstLetter = screen.getByTestId('first-letter-search-radio');
+    fireEvent.click(firstLetter);
+
+    const searchButton = screen.getByTestId(SEARCH_BTN);
+    fireEvent.click(searchButton);
+    
+    expect(alert).toBeTruthy();
+  })
 });
+
+describe('footer', () => {
+  it('verifica se ao clicar nos botoes do footer, troca de rota', () => {
+    renderWithRouter(<App />, { route: '/meals' });
+
+    const drinkFooter = screen.getByTestId('drinks-bottom-btn');
+
+    fireEvent.click(drinkFooter);
+    expect(window.location.pathname).toBe('/drinks')
+
+  })
+
+  it('verifica se ao clicar nos botoes do footer, troca de rota', () => {
+    renderWithRouter(<App />, { route: '/drinks' });
+
+    const mealsFooter = screen.getByTestId('meals-bottom-btn');
+
+    fireEvent.click(mealsFooter);
+    expect(window.location.pathname).toBe('/meals');
+  })
+})
