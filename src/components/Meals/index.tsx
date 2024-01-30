@@ -3,11 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import Context from '../../helpers/context/Context';
 import Footer from '../Footer';
 import './index.css';
+import FastButtons from '../FastButtons';
 
 function Meals() {
   const navigate = useNavigate();
   const { data, loading } = useContext(Context);
-  console.log(data);
 
   useEffect(() => {
     if (data && data.meals && data.meals.length === 1) {
@@ -17,13 +17,15 @@ function Meals() {
   }, [data, loading, navigate]);
 
   return (
-
-    <div>
+    <>
+      <div>
+        <FastButtons location="/meals" />
+      </div>
       <div>
         { data.meals && data.meals.length > 1
         && data.meals.slice(0, 12).map((meal: any, index: number) => (
           <div
-            key={ meal.idMeal }
+            key={ index }
             data-testid={ `${index}-recipe-card` }
           >
             <h2
@@ -46,7 +48,7 @@ function Meals() {
       >
         <Footer />
       </div>
-    </div>
+    </>
   );
 }
 export default Meals;

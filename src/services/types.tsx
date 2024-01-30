@@ -14,9 +14,13 @@ export type InitialFilterType = {
   input: string,
   radio: string,
 };
-export type InitialUser = {
+export type InitialUserType = {
   email: string,
   password: string,
+};
+
+export type FastButtonsPropsType = {
+  location: string,
 };
 
 export type DrinkType = {

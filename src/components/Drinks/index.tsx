@@ -3,11 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import Context from '../../helpers/context/Context';
 import Footer from '../Footer';
 import './index.css';
+import FastButtons from '../FastButtons';
 
 function Drinks() {
   const navigate = useNavigate();
   const { data, loading } = useContext(Context);
-  console.log(data);
 
   useEffect(() => {
     if (data && data.drinks && data.drinks.length === 1) {
@@ -17,8 +17,11 @@ function Drinks() {
   }, [data, loading, navigate]);
 
   return (
-    <div>
-      { data.drinks && data.drinks.length > 1
+    <>
+      <div />
+      <FastButtons location="/drinks" />
+      <div>
+        { data.drinks && data.drinks.length > 1
         && data.drinks.slice(0, 12).map((drink: any, index: number) => (
           <div
             key={ drink.strDrink }
@@ -37,14 +40,15 @@ function Drinks() {
             />
           </div>
         ))}
-      <div
-        data-testid="footer"
-        className="footer-css"
-      >
-        <Footer />
-      </div>
+        <div
+          data-testid="footer"
+          className="footer-css"
+        >
+          <Footer />
+        </div>
 
-    </div>
+      </div>
+    </>
   );
 }
 export default Drinks;
