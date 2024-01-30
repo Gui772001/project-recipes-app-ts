@@ -16,6 +16,10 @@ function Meals() {
     }
   }, [data, loading, navigate]);
 
+  function handleCard(idMeal: number) {
+    navigate(`/meals/${idMeal}`);
+  }
+
   return (
     <>
       <div>
@@ -27,6 +31,10 @@ function Meals() {
           <div
             key={ index }
             data-testid={ `${index}-recipe-card` }
+            onClick={ () => handleCard(meal.idMeal) }
+            onKeyDown={ (e) => e.key === 'Enter' && handleCard(meal.idMeal) }
+            role="button"
+            tabIndex={ 0 }
           >
             <h2
               data-testid={ `${index}-card-name` }
