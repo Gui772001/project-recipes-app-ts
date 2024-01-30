@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Context from '../../helpers/context/Context';
 import Footer from '../Footer';
@@ -17,6 +17,7 @@ function Meals() {
   }, [data, loading, navigate]);
 
   function handleCard(idMeal: number) {
+    console.log(idMeal);
     navigate(`/meals/${idMeal}`);
   }
 
