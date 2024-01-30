@@ -1,18 +1,46 @@
-import React, { useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import Context from '../../helpers/context/Context';
 
+type Drink = {
+  idDrink: string;
+  strDrink: string;
+  strDrinkThumb: string;
+  strInstructions: string;
+};
+
 function DrinkRecipe() {
-  const navigate = useNavigate();
-
   const { data } = useContext(Context);
+  const [drink, setDrink] = useState<Drink | null>(null);
 
-  if (!data.drinks || data.drinks.length !== 1) {
-    navigate('/drinks');
-    return null;
+  const location = useLocation();
+  const currentPath = location.pathname;
+
+  useEffect(() => {
+    if (data.length === 0 && currentPath !== '/meals' && currentPath !== '/drinks') {
+      const fetchData = async () => {
+        const pathSegments = currentPath.split('/');
+        let category = pathSegments[1].slice(0, -1);
+        const urlId = pathSegments[2];
+        if (category === 'drink') {
+          category = 'cocktail';
+        }
+        const apiURL = `https://www.the${category}db.com/api/json/v1/1/lookup.php?i=${urlId}`;
+        console.log(apiURL);
+        const response = await fetch(apiURL);
+        const result = await response.json();
+        console.log(result);
+        setDrink(result.drinks[0]);
+      };
+      fetchData();
+    } else {
+      setDrink(data.drinks[0]);
+    }
+  }, [data]);
+
+  if (!drink) {
+    return <div>Loading...</div>;
   }
-
-  const drink = data.drinks[0];
 
   return (
     <div>

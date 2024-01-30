@@ -21,7 +21,6 @@ function useFetch(filter: InitialFilterType) {
       if (result.meals === null || result.drinks === null) {
         window.alert('Sorry, we haven\'t found any recipes for these filters');
       }
-      console.log(result);
       setData(result);
       setLoading(false);
     };
