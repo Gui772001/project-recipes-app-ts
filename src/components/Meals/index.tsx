@@ -7,10 +7,10 @@ import FastButtons from '../FastButtons';
 
 function Meals() {
   const navigate = useNavigate();
-  const { data, loading } = useContext(Context);
+  const { data, loading, filter } = useContext(Context);
 
   useEffect(() => {
-    if (data && data.meals && data.meals.length === 1) {
+    if (data && data.meals && data.meals.length === 1 && filter.radio !== 'categories') {
       const { idMeal } = data.meals[0];
       navigate(`/meals/${idMeal}`);
     }
@@ -22,7 +22,7 @@ function Meals() {
         <FastButtons location="/meals" />
       </div>
       <div>
-        { data.meals && data.meals.length > 1
+        { data.meals
         && data.meals.slice(0, 12).map((meal: any, index: number) => (
           <div
             key={ index }
