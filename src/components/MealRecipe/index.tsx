@@ -119,6 +119,30 @@ function MealRecipe() {
             data-testid="video"
           />
         )}
+        <h3>Recomended Drinks:</h3>
+        <div
+          style={ {
+            display: 'flex',
+            overflowX: 'auto' } }
+        >
+          {drinks.slice(0, 6).map((drink: any, index) => (
+            <div
+              key={ index }
+              data-testid={ `${index}-recommendation-card` }
+            >
+              <h2
+                data-testid={ `${index}-recommendation-title` }
+              >
+                {drink.strDrink}
+              </h2>
+              <img
+                src={ drink.strDrinkThumb }
+                alt={ drink.strDrink }
+                style={ { width: '250px' } }
+              />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

@@ -101,6 +101,30 @@ function DrinkRecipe() {
         >
           {drink.strInstructions}
         </p>
+        <h3>Recomended Meals:</h3>
+        <div
+          style={ {
+            display: 'flex',
+            overflowX: 'auto' } }
+        >
+          {meals.slice(0, 6).map((meal: any, index) => (
+            <div
+              key={ index }
+              data-testid={ `${index}-recommendation-card` }
+            >
+              <h2
+                data-testid={ `${index}-recommendation-title` }
+              >
+                {meal.strMeal}
+              </h2>
+              <img
+                src={ meal.strMealThumb }
+                alt={ meal.strMeal }
+                style={ { width: '250px' } }
+              />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
