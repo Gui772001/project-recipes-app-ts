@@ -3,10 +3,10 @@ import Context from '../../helpers/context/Context';
 
 function FastButtons(props: { location: string }) {
   const { location } = props;
-  const { setFilter } = useContext(Context);
+  const { filter, setFilter } = useContext(Context);
 
   const handleClick = (name:string) => {
-    if (name === 'all') {
+    if (name === 'all' || name === filter.input) {
       setFilter({
         input: '',
         radio: '',
@@ -24,7 +24,7 @@ function FastButtons(props: { location: string }) {
       return (
         <>
           <button
-            data-testid="all-category-filter"
+            data-testid="All-category-filter"
             onClick={ () => handleClick('all') }
             name="all"
             value="all"
@@ -79,7 +79,7 @@ function FastButtons(props: { location: string }) {
       return (
         <>
           <button
-            data-testid="all-category-filter"
+            data-testid="All-category-filter"
             onClick={ () => handleClick('all') }
             name="all"
             value="all"
