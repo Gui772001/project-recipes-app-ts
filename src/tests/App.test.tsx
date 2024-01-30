@@ -198,7 +198,7 @@ describe('Header', () => {
     expect(nameSearch).toBeInTheDocument();
     expect(firstLetter).toBeInTheDocument();
   });
-  
+
   it('verifica se exibe um alert quando o input tem mais de 1 caractere no filtro first Letter', () => {
     renderWithRouter(<App />, { route: '/meals' });
 
@@ -213,9 +213,8 @@ describe('Header', () => {
 
     const searchButton = screen.getByTestId(SEARCH_BTN);
     fireEvent.click(searchButton);
-    
     expect(alert).toBeTruthy();
-  })
+  });
 });
 
 describe('footer', () => {
@@ -225,9 +224,8 @@ describe('footer', () => {
     const drinkFooter = screen.getByTestId('drinks-bottom-btn');
 
     fireEvent.click(drinkFooter);
-    expect(window.location.pathname).toBe('/drinks')
-
-  })
+    expect(window.location.pathname).toBe('/drinks');
+  });
 
   it('verifica se ao clicar nos botoes do footer, troca de rota', () => {
     renderWithRouter(<App />, { route: '/drinks' });
@@ -236,5 +234,5 @@ describe('footer', () => {
 
     fireEvent.click(mealsFooter);
     expect(window.location.pathname).toBe('/meals');
-  })
-})
+  });
+});
