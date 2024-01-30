@@ -9,7 +9,6 @@ function buildURL(filter: any, pathname: any) {
   const MEALS = pathname === '/meals';
 
   let apiURL = '';
-  console.log(filter.radio);
   switch (filter.radio) {
     case 'ingredient':
       apiURL = `${MEALS ? FOOD_API_URL : DRINK_API_URL}${INGREDIENT}`;
