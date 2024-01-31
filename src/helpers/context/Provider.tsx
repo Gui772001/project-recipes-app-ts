@@ -13,8 +13,6 @@ function Provider({ children }: ProviderProps) {
   const { data, loading } = useFetch(filter);
   const [btnRecipeText, setBtnRecipeText] = useState('Start Recipe');
 
-  console.log(filter);
-
   return (
     <Context.Provider
       value={ {
