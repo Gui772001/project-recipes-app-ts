@@ -15,7 +15,6 @@ function DrinkRecipe() {
   const [favoriteRecipes, setFavoriteRecipes] = useState<FavRecipesType[]>([]);
 
   const navigate = useNavigate();
-
   const location = useLocation();
   const currentPath = location.pathname;
   const pathSegments = currentPath.split('/');
@@ -28,7 +27,11 @@ function DrinkRecipe() {
   useEffect(() => {
     const favoriteRecipesString = localStorage.getItem('favoriteRecipes');
     if (favoriteRecipesString) {
-      setFavoriteRecipes(JSON.parse(favoriteRecipesString));
+      const favoriteRecipesList = (JSON.parse(favoriteRecipesString));
+      setFavoriteRecipes(favoriteRecipesList);
+      const isFavorite = favoriteRecipesList
+        .some((recipe: FavRecipesType) => recipe.id === urlId);
+      setFavorite(isFavorite);
     }
   }, []);
 
@@ -38,7 +41,6 @@ function DrinkRecipe() {
 
   useEffect(() => {
     const startBtnStateString = localStorage.getItem('inProgressRecipes');
-    // Verifica se há um valor existente e faz o parsing
     if (startBtnStateString !== null) {
       const startBtnState = JSON.parse(startBtnStateString);
       const keys = Object.keys(startBtnState.drinks);
@@ -54,13 +56,14 @@ function DrinkRecipe() {
   }, []);
 
   useEffect(() => {
+    const fetchData = async () => {
+      const apiURL = `https://www.the${category}db.com/api/json/v1/1/lookup.php?i=${urlId}`;
+      const response = await fetch(apiURL);
+      const result = await response.json();
+      setDrink(result.drinks[0]);
+    };
+
     if (data.length === 0 || currentPath.includes(`/drinks/${urlId}`)) {
-      const fetchData = async () => {
-        const apiURL = `https://www.the${category}db.com/api/json/v1/1/lookup.php?i=${urlId}`;
-        const response = await fetch(apiURL);
-        const result = await response.json();
-        setDrink(result.drinks[0]);
-      };
       fetchData();
     } else {
       setDrink(data.drinks[0]);
@@ -83,7 +86,7 @@ function DrinkRecipe() {
     return ingredients;
   };
 
-  const ingredients = drink ? getIngredients(drink) : [];
+  const ingredients = getIngredients(drink);
 
   const handleButtonStart = () => {
     const inProgressRecipesString = localStorage.getItem('inProgressRecipes');
@@ -98,7 +101,7 @@ function DrinkRecipe() {
     navigate(`/drinks/${urlId}/in-progress`);
   };
 
-  const handleClick = () => {
+  const handleFavorite = () => {
     setFavorite((prevFavorite) => {
       const newFavoriteStatus = !prevFavorite;
       if (newFavoriteStatus) {
@@ -135,17 +138,9 @@ function DrinkRecipe() {
   return (
     <div>
       <div key={ drink.idDrink }>
-        <h2
-          data-testid="recipe-title"
-        >
-          {drink.strDrink}
-        </h2>
+        <h2 data-testid="recipe-title">{drink.strDrink}</h2>
         <h3>Category:</h3>
-        <p
-          data-testid="recipe-category"
-        >
-          {drink.strAlcoholic}
-        </p>
+        <p data-testid="recipe-category">{drink.strAlcoholic}</p>
         <img
           src={ drink.strDrinkThumb }
           alt={ drink.strDrink }
@@ -155,53 +150,29 @@ function DrinkRecipe() {
         <h3>Ingredients:</h3>
         <ul>
           {ingredients.map((ingredient, index) => (
-            <li
-              key={ index }
-              data-testid={ `${index}-ingredient-name-and-measure` }
-            >
+            <li key={ index } data-testid={ `${index}-ingredient-name-and-measure` }>
               {ingredient}
             </li>
           ))}
         </ul>
         <h3>Instructions:</h3>
-        <p
-          data-testid="instructions"
-        >
-          {drink.strInstructions}
-        </p>
-        <button
-          type="button"
-          data-testid="share-btn"
-          // style={ { position: 'fixed', bottom: '10', left: '20', width: '100%' } }
-          onClick={ copyClipboard }
-        >
+        <p data-testid="instructions">{drink.strInstructions}</p>
+        <button type="button" data-testid="share-btn" onClick={ copyClipboard }>
           <img src={ shareIcon } alt="share" />
         </button>
-        { copyLink && (<p>Link copied!</p>)}
-        <button
-          type="button"
-          data-testid="favorite-btn"
-          // style={ { position: 'fixed', bottom: '20', left: '0', width: '100%' } }
-          onClick={ handleClick }
-        >
-          <img src={ favorite ? blackHeartIcon : whiteHeartIcon } alt="white-heart" />
+        {copyLink && <p>Link copied!</p>}
+        <button type="button" onClick={ handleFavorite }>
+          <img
+            src={ favorite ? blackHeartIcon : whiteHeartIcon }
+            alt={ favorite ? 'black-heart' : 'white-heart' }
+            data-testid="favorite-btn"
+          />
         </button>
         <h3>Recomended Meals:</h3>
-        <div
-          style={ {
-            display: 'flex',
-            overflowX: 'auto' } }
-        >
+        <div style={ { display: 'flex', overflowX: 'auto' } }>
           {meals.slice(0, 6).map((meal: any, index) => (
-            <div
-              key={ index }
-              data-testid={ `${index}-recommendation-card` }
-            >
-              <h2
-                data-testid={ `${index}-recommendation-title` }
-              >
-                {meal.strMeal}
-              </h2>
+            <div key={ index } data-testid={ `${index}-recommendation-card` }>
+              <h2 data-testid={ `${index}-recommendation-title` }>{meal.strMeal}</h2>
               <img
                 src={ meal.strMealThumb }
                 alt={ meal.strMeal }

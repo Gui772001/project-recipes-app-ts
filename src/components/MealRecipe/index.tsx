@@ -7,13 +7,8 @@ import { Meal, FavRecipesType } from '../../services/types';
 import Context from '../../helpers/context/Context';
 
 function MealRecipe() {
-  const {
-    data,
-    btnRecipeText,
-    setBtnRecipeText,
-    clipboard,
-    setClipboard,
-  } = useContext(Context);
+  const { data, btnRecipeText, setBtnRecipeText,
+    clipboard, setClipboard } = useContext(Context);
 
   const [meal, setMeal] = useState<Meal>({} as Meal);
   const [drinks, setDrinks] = useState([]);
@@ -31,7 +26,11 @@ function MealRecipe() {
   useEffect(() => {
     const favoriteRecipesString = localStorage.getItem('favoriteRecipes');
     if (favoriteRecipesString) {
-      setFavoriteRecipes(JSON.parse(favoriteRecipesString));
+      const favoriteRecipesList = (JSON.parse(favoriteRecipesString));
+      setFavoriteRecipes(favoriteRecipesList);
+      const isFavorite = favoriteRecipesList
+        .some((recipe: FavRecipesType) => recipe.id === urlId);
+      setFavorite(isFavorite);
     }
   }, []);
 
@@ -97,12 +96,15 @@ function MealRecipe() {
       ? JSON.parse(inProgressRecipesString)
       : { drinks: {}, meals: {} };
     inProgressRecipes.meals[urlId] = ['dwaipjsad', '21313', 'dkwlw'];
-    localStorage.setItem('inProgressRecipes', JSON.stringify(inProgressRecipes));
+    localStorage.setItem(
+      'inProgressRecipes',
+      JSON.stringify(inProgressRecipes),
+    );
     setBtnRecipeText('Continue Recipes');
     navigate(`/meals/${urlId}/in-progress`);
   };
 
-  const handleClick = () => {
+  const handleFavorite = () => {
     setFavorite((prevFavorite) => {
       const newFavoriteStatus = !prevFavorite;
       if (newFavoriteStatus) {
@@ -139,17 +141,9 @@ function MealRecipe() {
   return (
     <div>
       <div key={ meal.idMeal }>
-        <h2
-          data-testid="recipe-title"
-        >
-          {meal.strMeal}
-        </h2>
+        <h2 data-testid="recipe-title">{meal.strMeal}</h2>
         <h3>Category:</h3>
-        <p
-          data-testid="recipe-category"
-        >
-          {meal.strCategory}
-        </p>
+        <p data-testid="recipe-category">{meal.strCategory}</p>
         <img
           src={ meal.strMealThumb }
           alt={ meal.strMeal }
@@ -168,28 +162,17 @@ function MealRecipe() {
           ))}
         </ul>
         <h3>Instructions:</h3>
-
-        <p
-          data-testid="instructions"
-        >
-          {meal.strInstructions}
-        </p>
-        <button
-          type="button"
-          data-testid="share-btn"
-          // style={ { position: 'fixed', bottom: '10', left: '20', width: '100%' } }
-          onClick={ copyClipboard }
-        >
+        <p data-testid="instructions">{meal.strInstructions}</p>
+        <button type="button" data-testid="share-btn" onClick={ copyClipboard }>
           <img src={ shareIcon } alt="share" />
         </button>
-        { copyLink && (<p>Link copied!</p>)}
-        <button
-          type="button"
-          data-testid="favorite-btn"
-          onClick={ handleClick }
-          // style={ { position: 'fixed', bottom: '20', left: '0', width: '100%' } }
-        >
-          <img src={ favorite ? blackHeartIcon : whiteHeartIcon } alt="white-heart" />
+        {copyLink && <p>Link copied!</p>}
+        <button type="button" onClick={ handleFavorite }>
+          <img
+            data-testid="favorite-btn"
+            src={ favorite ? blackHeartIcon : whiteHeartIcon }
+            alt={ favorite ? 'black-heart' : 'white-heart' }
+          />
         </button>
         {youtubeEmbedUrl && (
           <iframe
@@ -198,26 +181,17 @@ function MealRecipe() {
             src={ youtubeEmbedUrl }
             title="YouTube video player"
             frameBorder="0"
-            allow="accelerometer; autoplay;
-             clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allow="accelerometer; autoplay; clipboard-write;
+            encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
             data-testid="video"
           />
         )}
-        <h3>Recomended Drinks:</h3>
-        <div
-          style={ {
-            display: 'flex',
-            overflowX: 'auto' } }
-        >
+        <h3>Recommended Drinks:</h3>
+        <div style={ { display: 'flex', overflowX: 'auto' } }>
           {drinks.slice(0, 6).map((drink: any, index) => (
-            <div
-              key={ index }
-              data-testid={ `${index}-recommendation-card` }
-            >
-              <h2
-                data-testid={ `${index}-recommendation-title` }
-              >
+            <div key={ index } data-testid={ `${index}-recommendation-card` }>
+              <h2 data-testid={ `${index}-recommendation-title` }>
                 {drink.strDrink}
               </h2>
               <img
