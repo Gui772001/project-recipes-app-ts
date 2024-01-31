@@ -13,7 +13,7 @@ type Meal = {
 };
 
 function MealRecipe() {
-  const { data } = useContext(Context);
+  const { data, btnRecipeText, setBtnRecipeText } = useContext(Context);
   const [meal, setMeal] = useState<Meal | null>(null);
   const [drinks, setDrinks] = useState([]);
 
@@ -24,6 +24,18 @@ function MealRecipe() {
   const urlId = pathSegments[2];
 
   useEffect(() => {
+    const startBtnStateString = localStorage.getItem('inProgressRecipes');
+
+    // Verifica se há um valor existente e faz o parsing
+    if (startBtnStateString !== null) {
+      const startBtnState = JSON.parse(startBtnStateString);
+      const keys = Object.keys(startBtnState.meals);
+      const resultBtn = keys.includes(urlId);
+      if (resultBtn) {
+        setBtnRecipeText('Continue Recipes');
+      }
+    }
+
     fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=')
       .then((response) => response.json())
       .then((drinkData) => setDrinks(drinkData.drinks));
@@ -35,7 +47,6 @@ function MealRecipe() {
         const apiURL = `https://www.the${category}db.com/api/json/v1/1/lookup.php?i=${urlId}`;
         const response = await fetch(apiURL);
         const result = await response.json();
-        console.log(result.meals[0]);
         setMeal(result.meals[0]);
       };
       fetchData();
@@ -68,6 +79,25 @@ function MealRecipe() {
   };
 
   const youtubeEmbedUrl = meal ? getYoutubeEmbedUrl(meal.strYoutube) : '';
+
+  const handleButtonStart = () => {
+    // Recupera o valor atual no localStorage
+    const inProgressRecipesString = localStorage.getItem('inProgressRecipes');
+
+    // Verifica se há um valor existente e faz o parsing
+    const inProgressRecipes = inProgressRecipesString
+      ? JSON.parse(inProgressRecipesString)
+      : { drinks: {}, meals: {} };
+
+    // Atualiza ou adiciona a informação desejada
+    // inProgressRecipes[/* tipo-da-receita */][/* id-da-receita */] = [/* lista-de-ingredientes-utilizados */];
+    inProgressRecipes.meals[urlId] = ['dwaipjsad', '21313', 'dkwlw'];
+
+    // Salva o objeto atualizado no localStorage
+    localStorage.setItem('inProgressRecipes', JSON.stringify(inProgressRecipes));
+
+    setBtnRecipeText('Continue Recipes');
+  };
 
   return (
     <div>
@@ -148,8 +178,10 @@ function MealRecipe() {
         type="button"
         data-testid="start-recipe-btn"
         style={ { position: 'fixed', bottom: '0', left: '0', width: '100%' } }
+        value={ btnRecipeText }
+        onClick={ handleButtonStart }
       >
-        Start Recipe
+        {`${btnRecipeText}`}
       </button>
     </div>
   );

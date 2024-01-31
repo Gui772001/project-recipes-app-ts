@@ -11,6 +11,8 @@ function Provider({ children }: ProviderProps) {
   };
   const [filter, setFilter] = useState<InitialFilterType>(initialfilter);
   const { data, loading } = useFetch(filter);
+  const [btnRecipeText, setBtnRecipeText] = useState('Start Recipe');
+
   console.log(filter);
 
   return (
@@ -21,6 +23,8 @@ function Provider({ children }: ProviderProps) {
         filter,
         setFilter,
         initialfilter,
+        btnRecipeText,
+        setBtnRecipeText,
       } }
     >
       {children}
