@@ -4,22 +4,15 @@ import Context from '../../helpers/context/Context';
 import shareIcon from '../../images/shareIcon.svg';
 import whiteHeartIcon from '../../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../../images/blackHeartIcon.svg';
-
-type Drink = {
-  idDrink: string;
-  strDrink: string;
-  strDrinkThumb: string;
-  strInstructions: string;
-  strCategory: string;
-  strAlcoholic: string;
-};
+import { FavRecipesType, Drink } from '../../services/types';
 
 function DrinkRecipe() {
   const { data, btnRecipeText, setBtnRecipeText } = useContext(Context);
-  const [drink, setDrink] = useState<Drink | null>(null);
+  const [drink, setDrink] = useState<Drink>({} as Drink);
   const [meals, setMeals] = useState([]);
   const [favorite, setFavorite] = useState(false);
   const [copyLink, setCopyLink] = useState(false);
+  const [favoriteRecipes, setFavoriteRecipes] = useState<FavRecipesType[]>([]);
 
   const navigate = useNavigate();
 
@@ -31,6 +24,17 @@ function DrinkRecipe() {
   if (category === 'drink') {
     category = 'cocktail';
   }
+
+  useEffect(() => {
+    const favoriteRecipesString = localStorage.getItem('favoriteRecipes');
+    if (favoriteRecipesString) {
+      setFavoriteRecipes(JSON.parse(favoriteRecipesString));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('favoriteRecipes', JSON.stringify(favoriteRecipes));
+  }, [favoriteRecipes]);
 
   useEffect(() => {
     const startBtnStateString = localStorage.getItem('inProgressRecipes');
@@ -82,15 +86,12 @@ function DrinkRecipe() {
   const ingredients = drink ? getIngredients(drink) : [];
 
   const handleButtonStart = () => {
-    // Recupera o valor atual no localStorage
     const inProgressRecipesString = localStorage.getItem('inProgressRecipes');
-    // Verifica se há um valor existente e faz o parsing
     const inProgressRecipes = inProgressRecipesString
       ? JSON.parse(inProgressRecipesString)
       : { drinks: {}, meals: {} };
-    // inProgressRecipes[/* tipo-da-receita */][/* id-da-receita */] = [/* lista-de-ingredientes-utilizados */];
     inProgressRecipes.drinks[urlId] = ['dwaipjsad', '21313', 'dkwlw'];
-    // Salva o objeto atualizado no localStorage
+
     localStorage.setItem('inProgressRecipes', JSON.stringify(inProgressRecipes));
     setBtnRecipeText('Continue Recipes');
 
@@ -98,7 +99,27 @@ function DrinkRecipe() {
   };
 
   const handleClick = () => {
-    setFavorite((prevFavorite) => !prevFavorite);
+    setFavorite((prevFavorite) => {
+      const newFavoriteStatus = !prevFavorite;
+      if (newFavoriteStatus) {
+        setFavoriteRecipes((prevFavorites: FavRecipesType[]) => [
+          ...prevFavorites,
+          {
+            id: drink.idDrink,
+            type: 'drink',
+            nationality: drink.strArea || '',
+            category: drink.strCategory,
+            alcoholicOrNot: drink.strAlcoholic || '',
+            name: drink.strDrink,
+            image: drink.strDrinkThumb,
+          },
+        ]);
+      } else {
+        setFavoriteRecipes((prevFavorites) => prevFavorites
+          .filter((recipe) => recipe.id !== drink.idDrink));
+      }
+      return newFavoriteStatus;
+    });
   };
 
   const copyClipboard = async () => {

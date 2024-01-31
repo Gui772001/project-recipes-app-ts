@@ -3,17 +3,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import shareIcon from '../../images/shareIcon.svg';
 import whiteHeartIcon from '../../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../../images/blackHeartIcon.svg';
-
+import { Meal, FavRecipesType } from '../../services/types';
 import Context from '../../helpers/context/Context';
-
-type Meal = {
-  idMeal: string;
-  strMeal: string;
-  strMealThumb: string;
-  strInstructions: string;
-  strCategory: string;
-  strYoutube: string;
-};
 
 function MealRecipe() {
   const {
@@ -24,10 +15,11 @@ function MealRecipe() {
     setClipboard,
   } = useContext(Context);
 
-  const [meal, setMeal] = useState<Meal | null>(null);
+  const [meal, setMeal] = useState<Meal>({} as Meal);
   const [drinks, setDrinks] = useState([]);
   const [favorite, setFavorite] = useState(false);
   const [copyLink, setCopyLink] = useState(false);
+  const [favoriteRecipes, setFavoriteRecipes] = useState<FavRecipesType[]>([]);
 
   const location = useLocation();
   const currentPath = location.pathname;
@@ -37,9 +29,18 @@ function MealRecipe() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const startBtnStateString = localStorage.getItem('inProgressRecipes');
+    const favoriteRecipesString = localStorage.getItem('favoriteRecipes');
+    if (favoriteRecipesString) {
+      setFavoriteRecipes(JSON.parse(favoriteRecipesString));
+    }
+  }, []);
 
-    // Verifica se há um valor existente e faz o parsing
+  useEffect(() => {
+    localStorage.setItem('favoriteRecipes', JSON.stringify(favoriteRecipes));
+  }, [favoriteRecipes]);
+
+  useEffect(() => {
+    const startBtnStateString = localStorage.getItem('inProgressRecipes');
     if (startBtnStateString !== null) {
       const startBtnState = JSON.parse(startBtnStateString);
       const keys = Object.keys(startBtnState.meals);
@@ -68,10 +69,6 @@ function MealRecipe() {
     }
   }, [data, currentPath]);
 
-  if (!meal) {
-    return <div>Loading...</div>;
-  }
-
   const getIngredients = (meals: any) => {
     const ingredients = [];
     for (let i = 1; i <= 20; i += 1) {
@@ -91,7 +88,8 @@ function MealRecipe() {
     return `https://www.youtube.com/embed/${videoId}`;
   };
 
-  const youtubeEmbedUrl = meal ? getYoutubeEmbedUrl(meal.strYoutube) : '';
+  const youtubeEmbedUrl = meal && meal.strYoutube
+    ? getYoutubeEmbedUrl(meal.strYoutube) : '';
 
   const handleButtonStart = () => {
     const inProgressRecipesString = localStorage.getItem('inProgressRecipes');
@@ -105,10 +103,30 @@ function MealRecipe() {
   };
 
   const handleClick = () => {
-    setFavorite((prevFavorite) => !prevFavorite);
+    setFavorite((prevFavorite) => {
+      const newFavoriteStatus = !prevFavorite;
+      if (newFavoriteStatus) {
+        setFavoriteRecipes((prevFavorites: FavRecipesType[]) => [
+          ...prevFavorites,
+          {
+            id: meal.idMeal,
+            type: 'meal',
+            nationality: meal.strArea,
+            category: meal.strCategory,
+            alcoholicOrNot: meal.strAlcoholic || '',
+            name: meal.strMeal,
+            image: meal.strMealThumb,
+          },
+        ]);
+      } else {
+        setFavoriteRecipes((prevFavorites) => prevFavorites
+          .filter((recipe) => recipe.id !== meal.idMeal));
+      }
+      return newFavoriteStatus;
+    });
   };
 
-  const copyClipboard = async (text) => {
+  const copyClipboard = async () => {
     const recipeLink = `${window.location.origin}/meals/${meal.idMeal}`;
     try {
       await navigator.clipboard.writeText(recipeLink);

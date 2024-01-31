@@ -10,6 +10,8 @@ export type ContextType = {
   initialfilter: InitialFilterType;
   btnRecipeText: string;
   setBtnRecipeText: React.Dispatch<React.SetStateAction<string>>;
+  clipboard: string;
+  setClipboard: React.Dispatch<React.SetStateAction<string>>;
 };
 
 export type InitialFilterType = {
@@ -134,3 +136,35 @@ export type FoodType = {
   strCreativeCommonsConfirmed: string | null;
   dateModified: string | null;
 };
+
+export type Meal = {
+  idMeal: string;
+  strMeal: string;
+  strArea: string;
+  strMealThumb: string;
+  strInstructions: string;
+  strAlcoholic: string;
+  strCategory: string;
+  strYoutube: string;
+};
+
+export type Drink = {
+  idDrink: string;
+  strDrink: string;
+  strArea: string;
+  strDrinkThumb: string;
+  strInstructions: string;
+  strCategory: string;
+  strAlcoholic: string;
+};
+
+export type FavRecipesType =
+  {
+    id: string,
+    type: string,
+    nationality: string,
+    category:string,
+    alcoholicOrNot:string,
+    name:string,
+    image:string,
+  };
