@@ -62,5 +62,3 @@ describe('Header', () => {
     expect(tittle).toBeInTheDocument();
   });
 });
-describe('Header', () => {
-});

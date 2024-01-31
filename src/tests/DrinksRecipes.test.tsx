@@ -32,7 +32,7 @@ describe('drinksRecipe', () => {
     renderWithRouter(<App />, { route: '/drinks' });
     const drinksRecipeCard = await screen.findByText('B-53');
     await userEvent.click(drinksRecipeCard);
-    const Recomendacao = await screen.findByTestId('0-recommendation-card');
+    const Recomendacao = await screen.findByTestId('1-recommendation-card');
     expect(Recomendacao).toBeInTheDocument();
   });
 });
