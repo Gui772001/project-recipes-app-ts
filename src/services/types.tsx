@@ -9,7 +9,7 @@ export type ContextType = {
   setFilter: React.Dispatch<React.SetStateAction<InitialFilterType>>
   initialfilter: InitialFilterType;
   btnRecipeText: string;
-  setBtnRecipeText: React.Dispatch<React.SetStateAction<string>>
+  setBtnRecipeText: React.Dispatch<React.SetStateAction<string>>;
 };
 
 export type InitialFilterType = {

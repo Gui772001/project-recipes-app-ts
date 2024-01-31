@@ -1,6 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
-
 import { useLocation, useNavigate } from 'react-router-dom';
+import shareIcon from '../../images/shareIcon.svg';
+import whiteHeartIcon from '../../images/whiteHeartIcon.svg';
+import blackHeartIcon from '../../images/blackHeartIcon.svg';
+
 import Context from '../../helpers/context/Context';
 
 type Meal = {
@@ -13,9 +16,18 @@ type Meal = {
 };
 
 function MealRecipe() {
-  const { data, btnRecipeText, setBtnRecipeText } = useContext(Context);
+  const {
+    data,
+    btnRecipeText,
+    setBtnRecipeText,
+    clipboard,
+    setClipboard,
+  } = useContext(Context);
+
   const [meal, setMeal] = useState<Meal | null>(null);
   const [drinks, setDrinks] = useState([]);
+  const [favorite, setFavorite] = useState(false);
+  const [copyLink, setCopyLink] = useState(false);
 
   const location = useLocation();
   const currentPath = location.pathname;
@@ -82,23 +94,28 @@ function MealRecipe() {
   const youtubeEmbedUrl = meal ? getYoutubeEmbedUrl(meal.strYoutube) : '';
 
   const handleButtonStart = () => {
-    // Recupera o valor atual no localStorage
     const inProgressRecipesString = localStorage.getItem('inProgressRecipes');
-
-    // Verifica se há um valor existente e faz o parsing
     const inProgressRecipes = inProgressRecipesString
       ? JSON.parse(inProgressRecipesString)
       : { drinks: {}, meals: {} };
-
-    // Atualiza ou adiciona a informação desejada
-    // inProgressRecipes[/* tipo-da-receita */][/* id-da-receita */] = [/* lista-de-ingredientes-utilizados */];
     inProgressRecipes.meals[urlId] = ['dwaipjsad', '21313', 'dkwlw'];
-
-    // Salva o objeto atualizado no localStorage
     localStorage.setItem('inProgressRecipes', JSON.stringify(inProgressRecipes));
-
     setBtnRecipeText('Continue Recipes');
     navigate(`/meals/${urlId}/in-progress`);
+  };
+
+  const handleClick = () => {
+    setFavorite((prevFavorite) => !prevFavorite);
+  };
+
+  const copyClipboard = async (text) => {
+    const recipeLink = `${window.location.origin}/meals/${meal.idMeal}`;
+    try {
+      await navigator.clipboard.writeText(recipeLink);
+      setCopyLink(true);
+    } catch (error) {
+      console.log('Failed to copy link to clipboard:', error);
+    }
   };
 
   return (
@@ -143,15 +160,18 @@ function MealRecipe() {
           type="button"
           data-testid="share-btn"
           // style={ { position: 'fixed', bottom: '10', left: '20', width: '100%' } }
+          onClick={ copyClipboard }
         >
-          Share
+          <img src={ shareIcon } alt="share" />
         </button>
+        { copyLink && (<p>Link copied!</p>)}
         <button
           type="button"
           data-testid="favorite-btn"
+          onClick={ handleClick }
           // style={ { position: 'fixed', bottom: '20', left: '0', width: '100%' } }
         >
-          Fav
+          <img src={ favorite ? blackHeartIcon : whiteHeartIcon } alt="white-heart" />
         </button>
         {youtubeEmbedUrl && (
           <iframe

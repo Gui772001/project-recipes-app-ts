@@ -1,6 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Context from '../../helpers/context/Context';
+import shareIcon from '../../images/shareIcon.svg';
+import whiteHeartIcon from '../../images/whiteHeartIcon.svg';
+import blackHeartIcon from '../../images/blackHeartIcon.svg';
 
 type Drink = {
   idDrink: string;
@@ -15,6 +18,9 @@ function DrinkRecipe() {
   const { data, btnRecipeText, setBtnRecipeText } = useContext(Context);
   const [drink, setDrink] = useState<Drink | null>(null);
   const [meals, setMeals] = useState([]);
+  const [favorite, setFavorite] = useState(false);
+  const [copyLink, setCopyLink] = useState(false);
+
   const navigate = useNavigate();
 
   const location = useLocation();
@@ -91,6 +97,20 @@ function DrinkRecipe() {
     navigate(`/drinks/${urlId}/in-progress`);
   };
 
+  const handleClick = () => {
+    setFavorite((prevFavorite) => !prevFavorite);
+  };
+
+  const copyClipboard = async () => {
+    const recipeLink = `${window.location.origin}/drinks/${drink.idDrink}`;
+    try {
+      await navigator.clipboard.writeText(recipeLink);
+      setCopyLink(true);
+    } catch (error) {
+      console.log('Failed to copy link to clipboard:', error);
+    }
+  };
+
   return (
     <div>
       <div key={ drink.idDrink }>
@@ -132,15 +152,18 @@ function DrinkRecipe() {
           type="button"
           data-testid="share-btn"
           // style={ { position: 'fixed', bottom: '10', left: '20', width: '100%' } }
+          onClick={ copyClipboard }
         >
-          Share
+          <img src={ shareIcon } alt="share" />
         </button>
+        { copyLink && (<p>Link copied!</p>)}
         <button
           type="button"
           data-testid="favorite-btn"
           // style={ { position: 'fixed', bottom: '20', left: '0', width: '100%' } }
+          onClick={ handleClick }
         >
-          Fav
+          <img src={ favorite ? blackHeartIcon : whiteHeartIcon } alt="white-heart" />
         </button>
         <h3>Recomended Meals:</h3>
         <div
