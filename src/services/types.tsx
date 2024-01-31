@@ -6,8 +6,10 @@ export type ContextType = {
   data: FoodType[] | DrinkType[] | any,
   loading: boolean,
   filter: InitialFilterType,
-  setFilter: (filter: any) => void;
+  setFilter: React.Dispatch<React.SetStateAction<InitialFilterType>>
   initialfilter: InitialFilterType;
+  btnRecipeText: string;
+  setBtnRecipeText: React.Dispatch<React.SetStateAction<string>>
 };
 
 export type InitialFilterType = {

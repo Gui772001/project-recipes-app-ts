@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Context from '../../helpers/context/Context';
 
 type Meal = {
@@ -13,7 +13,7 @@ type Meal = {
 };
 
 function MealRecipe() {
-  const { data } = useContext(Context);
+  const { data, btnRecipeText, setBtnRecipeText } = useContext(Context);
   const [meal, setMeal] = useState<Meal | null>(null);
   const [drinks, setDrinks] = useState([]);
 
@@ -22,8 +22,21 @@ function MealRecipe() {
   const pathSegments = currentPath.split('/');
   const category = pathSegments[1].slice(0, -1);
   const urlId = pathSegments[2];
+  const navigate = useNavigate();
 
   useEffect(() => {
+    const startBtnStateString = localStorage.getItem('inProgressRecipes');
+
+    // Verifica se há um valor existente e faz o parsing
+    if (startBtnStateString !== null) {
+      const startBtnState = JSON.parse(startBtnStateString);
+      const keys = Object.keys(startBtnState.meals);
+      const resultBtn = keys.includes(urlId);
+      if (resultBtn) {
+        setBtnRecipeText('Continue Recipes');
+      }
+    }
+
     fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=')
       .then((response) => response.json())
       .then((drinkData) => setDrinks(drinkData.drinks));
@@ -35,7 +48,6 @@ function MealRecipe() {
         const apiURL = `https://www.the${category}db.com/api/json/v1/1/lookup.php?i=${urlId}`;
         const response = await fetch(apiURL);
         const result = await response.json();
-        console.log(result.meals[0]);
         setMeal(result.meals[0]);
       };
       fetchData();
@@ -69,6 +81,26 @@ function MealRecipe() {
 
   const youtubeEmbedUrl = meal ? getYoutubeEmbedUrl(meal.strYoutube) : '';
 
+  const handleButtonStart = () => {
+    // Recupera o valor atual no localStorage
+    const inProgressRecipesString = localStorage.getItem('inProgressRecipes');
+
+    // Verifica se há um valor existente e faz o parsing
+    const inProgressRecipes = inProgressRecipesString
+      ? JSON.parse(inProgressRecipesString)
+      : { drinks: {}, meals: {} };
+
+    // Atualiza ou adiciona a informação desejada
+    // inProgressRecipes[/* tipo-da-receita */][/* id-da-receita */] = [/* lista-de-ingredientes-utilizados */];
+    inProgressRecipes.meals[urlId] = ['dwaipjsad', '21313', 'dkwlw'];
+
+    // Salva o objeto atualizado no localStorage
+    localStorage.setItem('inProgressRecipes', JSON.stringify(inProgressRecipes));
+
+    setBtnRecipeText('Continue Recipes');
+    navigate(`/meals/${urlId}/in-progress`);
+  };
+
   return (
     <div>
       <div key={ meal.idMeal }>
@@ -101,11 +133,26 @@ function MealRecipe() {
           ))}
         </ul>
         <h3>Instructions:</h3>
+
         <p
           data-testid="instructions"
         >
           {meal.strInstructions}
         </p>
+        <button
+          type="button"
+          data-testid="share-btn"
+          // style={ { position: 'fixed', bottom: '10', left: '20', width: '100%' } }
+        >
+          Share
+        </button>
+        <button
+          type="button"
+          data-testid="favorite-btn"
+          // style={ { position: 'fixed', bottom: '20', left: '0', width: '100%' } }
+        >
+          Fav
+        </button>
         {youtubeEmbedUrl && (
           <iframe
             width="560"
@@ -148,8 +195,10 @@ function MealRecipe() {
         type="button"
         data-testid="start-recipe-btn"
         style={ { position: 'fixed', bottom: '0', left: '0', width: '100%' } }
+        value={ btnRecipeText }
+        onClick={ handleButtonStart }
       >
-        Start Recipe
+        {`${btnRecipeText}`}
       </button>
     </div>
   );
