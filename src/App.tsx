@@ -2,8 +2,6 @@ import React from 'react';
 import './App.css';
 import { Routes, Route } from 'react-router-dom';
 import Login from './components/Login';
-import Meals from './components/Meals';
-import Drinks from './components/Drinks';
 import Profile from './components/Profile';
 import DoneRecipes from './components/DoneRecipes';
 import FavoriteRecipes from './components/FavoriteRecipes';
@@ -24,8 +22,8 @@ function App() {
           <Route path="/drinks" element={ <Recipes /> } />
           <Route path="/meals/:id" element={ <MealRecipe /> } />
           <Route path="/drinks/:id" element={ <DrinkRecipe /> } />
-          <Route path="/meals/:id/in-progress" element={ <Meals /> } />
-          <Route path="/drinks/:id/in-progress" element={ <Drinks /> } />
+          <Route path="/meals/:id/in-progress" element={ <Recipes /> } />
+          <Route path="/drinks/:id/in-progress" element={ <Recipes /> } />
           <Route path="/profile" element={ <Profile /> } />
           <Route path="/done-recipes" element={ <DoneRecipes /> } />
           <Route path="/favorite-recipes" element={ <FavoriteRecipes /> } />
