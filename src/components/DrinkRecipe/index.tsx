@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Context from '../../helpers/context/Context';
 
 type Drink = {
@@ -15,6 +15,7 @@ function DrinkRecipe() {
   const { data, btnRecipeText, setBtnRecipeText } = useContext(Context);
   const [drink, setDrink] = useState<Drink | null>(null);
   const [meals, setMeals] = useState([]);
+  const navigate = useNavigate();
 
   const location = useLocation();
   const currentPath = location.pathname;
@@ -86,6 +87,8 @@ function DrinkRecipe() {
     // Salva o objeto atualizado no localStorage
     localStorage.setItem('inProgressRecipes', JSON.stringify(inProgressRecipes));
     setBtnRecipeText('Continue Recipes');
+
+    navigate(`/drinks/${urlId}/in-progress`);
   };
 
   return (
@@ -125,6 +128,20 @@ function DrinkRecipe() {
         >
           {drink.strInstructions}
         </p>
+        <button
+          type="button"
+          data-testid="share-btn"
+          // style={ { position: 'fixed', bottom: '10', left: '20', width: '100%' } }
+        >
+          Share
+        </button>
+        <button
+          type="button"
+          data-testid="favorite-btn"
+          // style={ { position: 'fixed', bottom: '20', left: '0', width: '100%' } }
+        >
+          Fav
+        </button>
         <h3>Recomended Meals:</h3>
         <div
           style={ {

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Context from '../../helpers/context/Context';
 
 type Meal = {
@@ -22,6 +22,7 @@ function MealRecipe() {
   const pathSegments = currentPath.split('/');
   const category = pathSegments[1].slice(0, -1);
   const urlId = pathSegments[2];
+  const navigate = useNavigate();
 
   useEffect(() => {
     const startBtnStateString = localStorage.getItem('inProgressRecipes');
@@ -97,6 +98,7 @@ function MealRecipe() {
     localStorage.setItem('inProgressRecipes', JSON.stringify(inProgressRecipes));
 
     setBtnRecipeText('Continue Recipes');
+    navigate(`/meals/${urlId}/in-progress`);
   };
 
   return (
@@ -131,11 +133,26 @@ function MealRecipe() {
           ))}
         </ul>
         <h3>Instructions:</h3>
+
         <p
           data-testid="instructions"
         >
           {meal.strInstructions}
         </p>
+        <button
+          type="button"
+          data-testid="share-btn"
+          // style={ { position: 'fixed', bottom: '10', left: '20', width: '100%' } }
+        >
+          Share
+        </button>
+        <button
+          type="button"
+          data-testid="favorite-btn"
+          // style={ { position: 'fixed', bottom: '20', left: '0', width: '100%' } }
+        >
+          Fav
+        </button>
         {youtubeEmbedUrl && (
           <iframe
             width="560"

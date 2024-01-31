@@ -10,7 +10,10 @@ function Meals() {
   const { data, loading, filter } = useContext(Context);
 
   useEffect(() => {
-    if (data && data.meals && data.meals.length === 1 && filter.radio !== 'categories') {
+    if (window.location.pathname.includes('in-progress')) {
+      console.log('preencher com detalhe da pag de receitas-in-progress');
+    } else if (data && data.meals && data.meals.length === 1
+      && filter.radio !== 'categories') {
       const { idMeal } = data.meals[0];
       navigate(`/meals/${idMeal}`);
     }
