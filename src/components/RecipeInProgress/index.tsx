@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { FavRecipesType } from '../../services/types';
+import whiteHeartIcon from '../../images/whiteHeartIcon.svg';
+import blackHeartIcon from '../../images/blackHeartIcon.svg';
 
 function RecipeInProgress() {
   const { id } = useParams<{ id: string }>();
   const [mealRecipe, setMealRecipe] = useState<any>('');
   const [drinkRecipe, setDrinkRecipe] = useState<any>('');
+  const [copyLink, setCopyLink] = useState(false);
+  const [favorite, setFavorite] = useState(false);
+  const [favoriteRecipes, setFavoriteRecipes] = useState<FavRecipesType[]>([]);
   const currentPath = window.location.pathname;
   const pathSegments = currentPath.split('/');
   const urlId = pathSegments[2];
@@ -48,6 +54,21 @@ function RecipeInProgress() {
     localStorage.setItem('inProgressRecipes', JSON.stringify(inProgressRecipes));
   }, [inProgressRecipes]);
 
+  useEffect(() => {
+    const favoriteRecipesString = localStorage.getItem('favoriteRecipes');
+    if (favoriteRecipesString) {
+      const favoriteRecipesList = (JSON.parse(favoriteRecipesString));
+      setFavoriteRecipes(favoriteRecipesList);
+      const isFavorite = favoriteRecipesList
+        .some((recipe: FavRecipesType) => recipe.id === urlId);
+      setFavorite(isFavorite);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('favoriteRecipes', JSON.stringify(favoriteRecipes));
+  }, [favoriteRecipes]);
+
   const handleCheckbox = (e: any, ingredient: string) => {
     const updatedRecipes = { ...inProgressRecipes };
     const currentIngredients = updatedRecipes[currentPath
@@ -79,6 +100,74 @@ function RecipeInProgress() {
 
   const drinkIngredients = Object.keys(drinkRecipe)
     .filter((key) => key.includes('Ingredient') && drinkRecipe[key]);
+
+  const copyMealClipboard = async () => {
+    const recipeLink = `${window.location.origin}/meals/${mealRecipe.idMeal}`;
+    try {
+      await navigator.clipboard.writeText(recipeLink);
+      setCopyLink(true);
+    } catch (error) {
+      console.log('Failed to copy link to clipboard:', error);
+    }
+  };
+
+  const copyDrinkClipboard = async () => {
+    const recipeLink = `${window.location.origin}/drinks/${drinkRecipe.idDrink}`;
+    try {
+      await navigator.clipboard.writeText(recipeLink);
+      setCopyLink(true);
+    } catch (error) {
+      console.log('Failed to copy link to clipboard:', error);
+    }
+  };
+
+  const handleMealFavorite = () => {
+    setFavorite((prevFavorite) => {
+      const newFavoriteStatus = !prevFavorite;
+      if (newFavoriteStatus) {
+        setFavoriteRecipes((prevFavorites: FavRecipesType[]) => [
+          ...prevFavorites,
+          {
+            id: mealRecipe.idMeal,
+            type: 'meal',
+            nationality: mealRecipe.strArea,
+            category: mealRecipe.strCategory,
+            alcoholicOrNot: mealRecipe.strAlcoholic || '',
+            name: mealRecipe.strMeal,
+            image: mealRecipe.strMealThumb,
+          },
+        ]);
+      } else {
+        setFavoriteRecipes((prevFavorites) => prevFavorites
+          .filter((recipe) => recipe.id !== mealRecipe.idMeal));
+      }
+      return newFavoriteStatus;
+    });
+  };
+
+  const handleDrinkFavorite = () => {
+    setFavorite((prevFavorite) => {
+      const newFavoriteStatus = !prevFavorite;
+      if (newFavoriteStatus) {
+        setFavoriteRecipes((prevFavorites: FavRecipesType[]) => [
+          ...prevFavorites,
+          {
+            id: drinkRecipe.idDrink,
+            type: 'drink',
+            nationality: drinkRecipe.strArea || '',
+            category: drinkRecipe.strCategory,
+            alcoholicOrNot: drinkRecipe.strAlcoholic || '',
+            name: drinkRecipe.strDrink,
+            image: drinkRecipe.strDrinkThumb,
+          },
+        ]);
+      } else {
+        setFavoriteRecipes((prevFavorites) => prevFavorites
+          .filter((recipe) => recipe.id !== drinkRecipe.idDrink));
+      }
+      return newFavoriteStatus;
+    });
+  };
 
   return (
     <div>
@@ -113,8 +202,22 @@ function RecipeInProgress() {
               ))}
             </ul>
             <p data-testid="instructions">{mealRecipe.strInstructions}</p>
-            <button data-testid="favorite-btn">Favoritar</button>
-            <button data-testid="share-btn">Compartilhar</button>
+
+            <button
+              onClick={ handleMealFavorite }
+            >
+              <img
+                data-testid="favorite-btn"
+                src={ favorite ? blackHeartIcon : whiteHeartIcon }
+                alt={ favorite ? 'black-heart' : 'white-heart' }
+              />
+            </button>
+            <button
+              data-testid="share-btn"
+              onClick={ copyMealClipboard }
+            >
+              {copyLink ? 'Link copied!' : 'Share recipe'}
+            </button>
             <button data-testid="finish-recipe-btn">Finalizar Receita</button>
           </div>
         ) : (
@@ -146,8 +249,21 @@ function RecipeInProgress() {
               ))}
             </ul>
             <p data-testid="instructions">{drinkRecipe.strInstructions}</p>
-            <button data-testid="favorite-btn">Favoritar</button>
-            <button data-testid="share-btn">Compartilhar</button>
+            <button
+              onClick={ handleDrinkFavorite }
+            >
+              <img
+                data-testid="favorite-btn"
+                src={ favorite ? blackHeartIcon : whiteHeartIcon }
+                alt={ favorite ? 'black-heart' : 'white-heart' }
+              />
+            </button>
+            <button
+              data-testid="share-btn"
+              onClick={ copyDrinkClipboard }
+            >
+              {copyLink ? 'Link copied!' : 'Share Recipe'}
+            </button>
             <button data-testid="finish-recipe-btn">Finalizar Receita</button>
           </div>
         )}
