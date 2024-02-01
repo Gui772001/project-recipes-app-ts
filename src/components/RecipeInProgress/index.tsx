@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { FavRecipesType } from '../../services/types';
 import whiteHeartIcon from '../../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../../images/blackHeartIcon.svg';
@@ -11,6 +11,7 @@ function RecipeInProgress() {
   const [copyLink, setCopyLink] = useState(false);
   const [favorite, setFavorite] = useState(false);
   const [favoriteRecipes, setFavoriteRecipes] = useState<FavRecipesType[]>([]);
+  const [allChecked, setAllChecked] = useState(false);
   const currentPath = window.location.pathname;
   const pathSegments = currentPath.split('/');
   const urlId = pathSegments[2];
@@ -21,6 +22,7 @@ function RecipeInProgress() {
     drinks: {},
     meals: {},
   });
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -87,7 +89,13 @@ function RecipeInProgress() {
         .includes('/meals/') ? 'meals' : 'drinks'][urlId] = currentIngredients
         .filter((item) => item !== ingredient);
     }
+    const totalIngredients = ingredients.length;
+    const checkedIngredients = inProgressRecipes[currentPath
+      .includes('/meals/') ? 'meals' : 'drinks'][urlId] || [];
+    const checkedIngredientsCount = checkedIngredients.length;
+    const allIngredientsChecked = totalIngredients === checkedIngredientsCount;
 
+    setAllChecked(allIngredientsChecked);
     setInProgressRecipes(updatedRecipes);
   };
 
@@ -132,6 +140,23 @@ function RecipeInProgress() {
   const ingredients = Object.keys(recipe).filter(
     (key) => key.includes('Ingredient') && recipe[key],
   );
+
+  const handleFinishRecipe = () => {
+    const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes') || '[]');
+    doneRecipes.push({
+      id: mealRecipe.idMeal || drinkRecipe.idDrink,
+      type: currentPath.includes('/meals/') ? 'meal' : 'drink',
+      category: mealRecipe.strCategory || drinkRecipe.strCategory,
+      alcoholicOrNot: mealRecipe.strAlcoholic || drinkRecipe.strAlcoholic || '',
+      name: mealRecipe.strMeal || drinkRecipe.strDrink,
+      image: mealRecipe.strMealThumb || drinkRecipe.strDrinkThumb,
+      doneDate: new Date(),
+      tags: mealRecipe.strTags ? mealRecipe.strTags.split(',') : [],
+      nationality: mealRecipe.strArea || '',
+    });
+    localStorage.setItem('doneRecipes', JSON.stringify(doneRecipes));
+    navigate('/done-recipes');
+  };
 
   return (
     <div>
@@ -178,7 +203,13 @@ function RecipeInProgress() {
       >
         {copyLink ? 'Link copied!' : 'Share recipe'}
       </button>
-      <button data-testid="finish-recipe-btn">Finalizar Receita</button>
+      <button
+        data-testid="finish-recipe-btn"
+        disabled={ !allChecked }
+        onClick={ handleFinishRecipe }
+      >
+        Finalizar Receita
+      </button>
     </div>
   );
 }
