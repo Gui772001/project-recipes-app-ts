@@ -93,7 +93,7 @@ function DrinkRecipe() {
     const inProgressRecipes = inProgressRecipesString
       ? JSON.parse(inProgressRecipesString)
       : { drinks: {}, meals: {} };
-    inProgressRecipes.drinks[urlId] = ['dwaipjsad', '21313', 'dkwlw'];
+    inProgressRecipes.drinks[urlId] = [];
 
     localStorage.setItem('inProgressRecipes', JSON.stringify(inProgressRecipes));
     setBtnRecipeText('Continue Recipes');

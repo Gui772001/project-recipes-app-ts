@@ -6,6 +6,14 @@ function RecipeInProgress() {
   const [mealRecipe, setMealRecipe] = useState<any>('');
   const [drinkRecipe, setDrinkRecipe] = useState<any>('');
   const currentPath = window.location.pathname;
+  const pathSegments = currentPath.split('/');
+  const urlId = pathSegments[2];
+  const [inProgressRecipes, setInProgressRecipes] = useState<
+  { drinks: { [key: string]: string[] }; meals: { [key: string]: string[] } }>({
+    drinks: {},
+    meals: {},
+  });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (currentPath.includes(`/meals/${id}/in-progress`)) {
@@ -27,13 +35,41 @@ function RecipeInProgress() {
     }
   }, [id, currentPath]);
 
-  const handleCheckbox = (e: any) => {
+  useEffect(() => {
+    const inProgressRecipesString = localStorage.getItem('inProgressRecipes');
+    if (inProgressRecipesString) {
+      const savedInProgressRecipes = JSON.parse(inProgressRecipesString);
+      setInProgressRecipes(savedInProgressRecipes);
+    }
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('inProgressRecipes', JSON.stringify(inProgressRecipes));
+  }, [inProgressRecipes]);
+
+  const handleCheckbox = (e: any, ingredient: string) => {
+    const updatedRecipes = { ...inProgressRecipes };
+    const currentIngredients = updatedRecipes[currentPath
+      .includes('/meals/') ? 'meals' : 'drinks'][urlId] || [];
+
     if (e.target.checked) {
       e.target.parentNode.style.textDecoration = 'line-through solid rgb(0, 0, 0)';
+      updatedRecipes[currentPath
+        .includes('/meals/') ? 'meals' : 'drinks'][urlId] = currentIngredients
+        .includes(ingredient)
+        ? currentIngredients.filter((item) => item !== ingredient)
+        : [...currentIngredients, ingredient];
     } else {
       e.target.parentNode.style.textDecoration = 'none';
     }
+
+    setInProgressRecipes(updatedRecipes);
   };
+
+  if (loading) {
+    return <div>Carregando...</div>; // ou qualquer indicador de carregamento que você desejar
+  }
 
   return (
     <div>
@@ -55,11 +91,14 @@ function RecipeInProgress() {
                     <li key={ key }>
                       <label
                         htmlFor={ key }
-                        data-testid={ `${index}-ingredient-step` }
+                        data-testid={ `${index - 9}-ingredient-step` }
                       >
                         <input
                           type="checkbox"
-                          onChange={ handleCheckbox }
+                          checked={ (inProgressRecipes[currentPath
+                            .includes('/meals/') ? 'meals' : 'drinks'][urlId] || [])
+                            .includes(key) }
+                          onChange={ (e) => handleCheckbox(e, key) }
                         />
                         {mealRecipe[key]}
                       </label>
@@ -90,11 +129,14 @@ function RecipeInProgress() {
                     <li key={ key }>
                       <label
                         htmlFor={ key }
-                        data-testid={ `${index}-ingredient-step` }
+                        data-testid={ `${index - 17}-ingredient-step` }
                       >
                         <input
                           type="checkbox"
-                          onChange={ handleCheckbox }
+                          checked={ (inProgressRecipes[currentPath
+                            .includes('/meals/') ? 'meals' : 'drinks'][urlId] || [])
+                            .includes(key) }
+                          onChange={ (e) => handleCheckbox(e, key) }
                         />
                         {drinkRecipe[key]}
                       </label>
