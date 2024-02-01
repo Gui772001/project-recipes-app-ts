@@ -16,3 +16,10 @@ export const getPageTitle = (pathname: string) => {
       return 'Título';
   }
 };
+
+export const fetchById = async (id: string, category: string) => {
+  const apiURL = `https://www.the${category}db.com/api/json/v1/1/lookup.php?i=${id}`;
+  const response = await fetch(apiURL);
+  const result = await response.json();
+  return result;
+};

@@ -93,7 +93,7 @@ function DrinkRecipe() {
     const inProgressRecipes = inProgressRecipesString
       ? JSON.parse(inProgressRecipesString)
       : { drinks: {}, meals: {} };
-    inProgressRecipes.drinks[urlId] = ['dwaipjsad', '21313', 'dkwlw'];
+    inProgressRecipes.drinks[urlId] = [];
 
     localStorage.setItem('inProgressRecipes', JSON.stringify(inProgressRecipes));
     setBtnRecipeText('Continue Recipes');
@@ -160,7 +160,7 @@ function DrinkRecipe() {
         <button type="button" data-testid="share-btn" onClick={ copyClipboard }>
           <img src={ shareIcon } alt="share" />
         </button>
-        {copyLink && <p>Link copied!</p>}
+        {copyLink ? 'Link copiado!' : 'Share recipe' }
         <button type="button" onClick={ handleFavorite }>
           <img
             src={ favorite ? blackHeartIcon : whiteHeartIcon }
