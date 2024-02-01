@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import userEvent from '@testing-library/user-event';
 import renderWithRouter from '../renderWithRouter';
@@ -34,5 +34,32 @@ describe('drinksRecipe', () => {
     await userEvent.click(drinksRecipeCard);
     const Recomendacao = await screen.findByTestId('1-recommendation-card');
     expect(Recomendacao).toBeInTheDocument();
+  });
+});
+it('Verifica se a o botão de favorito', async () => {
+  renderWithRouter(<App />, { route: '/drinks' });
+  const drinksRecipeCard = await screen.findByText('B-53');
+  await userEvent.click(drinksRecipeCard);
+  const Recomendacao = await screen.findByTestId('favorite-btn');
+  expect(Recomendacao).toBeInTheDocument();
+});
+it('Verificar se clicar no botão de compartilhar pega o link', async () => {
+  renderWithRouter(<App />, { route: '/drinks' });
+  const drinksRecipeCard = await screen.findByText('B-53');
+  await userEvent.click(drinksRecipeCard);
+  const Recomendacao = await screen.findByTestId('share-btn');
+  expect(Recomendacao).toBeInTheDocument();
+});
+it.only('Verificar se clicar no botão de compartilhar pega o link', async () => {
+  renderWithRouter(<App />, { route: '/drinks' });
+  const drinksRecipeCard = await screen.findByText('Ace');
+  await userEvent.click(drinksRecipeCard);
+  const Recomendacao = await screen.findByTestId('share-btn');
+  expect(Recomendacao).toBeInTheDocument();
+  let clip = '';
+  const fakeLink = 'http://localhost:3000/drinks/17225';
+  await navigator.clipboard.readText().then((text) => {
+    clip = text;
+    expect(clip).toEqual(fakeLink);
   });
 });

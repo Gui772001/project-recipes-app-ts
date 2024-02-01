@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import userEvent from '@testing-library/user-event';
 import renderWithRouter from '../renderWithRouter';
@@ -40,5 +40,23 @@ describe('drinksRecipe', () => {
     await userEvent.click(drinksRecipeCard);
     const Recomendacao = await screen.findByTestId('0-recommendation-card');
     expect(Recomendacao).toBeInTheDocument();
+  });
+  it('Verifica se a o botão de favorito', async () => {
+    renderWithRouter(<App />, { route: '/meals' });
+    const drinksRecipeCard = await screen.findByText('Bistek');
+    await userEvent.click(drinksRecipeCard);
+    const Recomendacao = await screen.findByTestId('favorite-btn');
+    expect(Recomendacao).toBeInTheDocument();
+  });
+  it('Verificar se clicar no botão de compartilhar pega o link', async () => {
+    renderWithRouter(<App />, { route: '/meals' });
+    const drinksRecipeCard = await screen.findByText('Big Mac');
+    await userEvent.click(drinksRecipeCard);
+    const Recomendacao = await screen.findByTestId('share-btn');
+    expect(Recomendacao).toBeInTheDocument();
+    const fakeLink = 'http://localhost:3000/meals/53013';
+    waitFor(() => {
+      expect(navigator.clipboard.readText()).resolves.toEqual(fakeLink);
+    });
   });
 });
