@@ -62,6 +62,9 @@ function RecipeInProgress() {
         : [...currentIngredients, ingredient];
     } else {
       e.target.parentNode.style.textDecoration = 'none';
+      updatedRecipes[currentPath
+        .includes('/meals/') ? 'meals' : 'drinks'][urlId] = currentIngredients
+        .filter((item) => item !== ingredient);
     }
 
     setInProgressRecipes(updatedRecipes);
@@ -70,6 +73,12 @@ function RecipeInProgress() {
   if (loading) {
     return <div>Carregando...</div>; // ou qualquer indicador de carregamento que você desejar
   }
+
+  const mealIngredients = Object.keys(mealRecipe)
+    .filter((key) => key.includes('Ingredient') && mealRecipe[key]);
+
+  const drinkIngredients = Object.keys(drinkRecipe)
+    .filter((key) => key.includes('Ingredient') && drinkRecipe[key]);
 
   return (
     <div>
@@ -85,28 +94,23 @@ function RecipeInProgress() {
             <h1 data-testid="recipe-title">{mealRecipe.strMeal}</h1>
             <p data-testid="recipe-category">{mealRecipe.strCategory}</p>
             <ul>
-              {Object.keys(mealRecipe).map((key, index) => {
-                if (key.includes('Ingredient') && mealRecipe[key]) {
-                  return (
-                    <li key={ key }>
-                      <label
-                        htmlFor={ key }
-                        data-testid={ `${index - 9}-ingredient-step` }
-                      >
-                        <input
-                          type="checkbox"
-                          checked={ (inProgressRecipes[currentPath
-                            .includes('/meals/') ? 'meals' : 'drinks'][urlId] || [])
-                            .includes(key) }
-                          onChange={ (e) => handleCheckbox(e, key) }
-                        />
-                        {mealRecipe[key]}
-                      </label>
-                    </li>
-                  );
-                }
-                return null;
-              })}
+              {mealIngredients.map((key, index) => (
+                <li key={ key }>
+                  <label
+                    htmlFor={ key }
+                    data-testid={ `${index}-ingredient-step` }
+                  >
+                    <input
+                      type="checkbox"
+                      checked={ (inProgressRecipes[currentPath
+                        .includes('/meals/') ? 'meals' : 'drinks'][urlId] || [])
+                        .includes(key) }
+                      onChange={ (e) => handleCheckbox(e, key) }
+                    />
+                    {mealRecipe[key]}
+                  </label>
+                </li>
+              ))}
             </ul>
             <p data-testid="instructions">{mealRecipe.strInstructions}</p>
             <button data-testid="favorite-btn">Favoritar</button>
@@ -123,28 +127,23 @@ function RecipeInProgress() {
             <h1 data-testid="recipe-title">{drinkRecipe.strDrink}</h1>
             <p data-testid="recipe-category">{drinkRecipe.strCategory}</p>
             <ul>
-              {Object.keys(drinkRecipe).map((key, index) => {
-                if (key.includes('Ingredient') && drinkRecipe[key]) {
-                  return (
-                    <li key={ key }>
-                      <label
-                        htmlFor={ key }
-                        data-testid={ `${index - 17}-ingredient-step` }
-                      >
-                        <input
-                          type="checkbox"
-                          checked={ (inProgressRecipes[currentPath
-                            .includes('/meals/') ? 'meals' : 'drinks'][urlId] || [])
-                            .includes(key) }
-                          onChange={ (e) => handleCheckbox(e, key) }
-                        />
-                        {drinkRecipe[key]}
-                      </label>
-                    </li>
-                  );
-                }
-                return null;
-              })}
+              {drinkIngredients.map((key, index) => (
+                <li key={ key }>
+                  <label
+                    htmlFor={ key }
+                    data-testid={ `${index}-ingredient-step` }
+                  >
+                    <input
+                      type="checkbox"
+                      checked={ (inProgressRecipes[currentPath
+                        .includes('/meals/') ? 'meals' : 'drinks'][urlId] || [])
+                        .includes(key) }
+                      onChange={ (e) => handleCheckbox(e, key) }
+                    />
+                    {drinkRecipe[key]}
+                  </label>
+                </li>
+              ))}
             </ul>
             <p data-testid="instructions">{drinkRecipe.strInstructions}</p>
             <button data-testid="favorite-btn">Favoritar</button>
