@@ -61,8 +61,8 @@ function Recipes() {
               key={ drink.strDrink }
               data-testid={ `${index}-recipe-card` }
               onClick={ () => handleCard(drink.idDrink, 'drinks') }
-              onKeyDown={ (e) => e.key === 'Enter'
-              && handleCard(drink.idDrink, 'drinks') }
+              // onKeyDown={ (e) => e.key === 'Enter'
+              // && handleCard(drink.idDrink, 'drinks') }
               role="button"
               tabIndex={ 0 }
             >
