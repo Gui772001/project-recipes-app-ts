@@ -23,3 +23,30 @@ export const fetchById = async (id: string, category: string) => {
   const result = await response.json();
   return result;
 };
+
+export const handleLocalStorage = (
+  key: string,
+  setter: React.Dispatch<React.SetStateAction<any>>,
+) => {
+  const item = localStorage.getItem(key);
+  if (item) {
+    const parsedItem = JSON.parse(item);
+    setter(parsedItem);
+  }
+};
+
+export const setLocalStorage = (key: string, value: any) => {
+  localStorage.setItem(key, JSON.stringify(value));
+};
+
+export const copyClipboard = async (location: any, setCopyLink: any) => {
+  const urlType = location.pathname.split('/')[1].slice(0, -1);
+  const recipeId = location.pathname.split('/')[2];
+  const recipeLink = `${window.location.origin}/${urlType}s/${recipeId}`;
+  try {
+    await navigator.clipboard.writeText(recipeLink);
+    setCopyLink(true);
+  } catch (error) {
+    console.log('Failed to copy link to clipboard:', error);
+  }
+};

@@ -180,9 +180,9 @@ function RecipeInProgress() {
                     .includes('/meals/') ? 'meals' : 'drinks'][
                     urlId
                   ] || []
-                  ).includes(key)
+                  ).includes(ingredients[index])
                 }
-                onChange={ (e) => handleCheckbox(e, key) }
+                onChange={ (e) => handleCheckbox(e, ingredients[index]) }
               />
               {recipe[key]}
             </label>

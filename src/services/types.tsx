@@ -182,3 +182,19 @@ export type RecipeType = {
   tags?: string[];
   alcoholicOrNot?: string;
 };
+
+export type RecipeDetailsProps = {
+  type: string;
+  favorite: boolean;
+  setCopyLink: (value: boolean) => void;
+  youtubeEmbedUrl: string;
+  location: any;
+  recipe: Meal | Drink;
+  ingredients: string[];
+  handleButtonStart: () => void;
+  copyClipboard: (location: any, setCopyLink: any) => Promise<void>;
+  handleMealFavorite: () => void;
+  handleDrinkFavorite: () => void;
+  copyLink: boolean;
+  btnRecipeText: string;
+};

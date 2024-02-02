@@ -7,10 +7,11 @@ import DoneRecipes from './components/DoneRecipes';
 import FavoriteRecipes from './components/FavoriteRecipes';
 import Header from './components/Header';
 import Provider from './helpers/context/Provider';
-import MealRecipe from './components/MealRecipe';
+// import MealRecipe from './components/MealRecipe';
 import Recipes from './components/Recipes';
-import DrinkRecipe from './components/DrinkRecipe';
+// import DrinkRecipe from './components/DrinkRecipe';
 import RecipeInProgress from './components/RecipeInProgress';
+import RecipeDetails from './components/RecipeDetails';
 
 function App() {
   return (
@@ -21,8 +22,8 @@ function App() {
           <Route path="/" element={ <Login /> } />
           <Route path="/meals" element={ <Recipes /> } />
           <Route path="/drinks" element={ <Recipes /> } />
-          <Route path="/meals/:id" element={ <MealRecipe /> } />
-          <Route path="/drinks/:id" element={ <DrinkRecipe /> } />
+          <Route path="/meals/:id" element={ <RecipeDetails /> } />
+          <Route path="/drinks/:id" element={ <RecipeDetails /> } />
           <Route path="/meals/:id/in-progress" element={ <RecipeInProgress /> } />
           <Route path="/drinks/:id/in-progress" element={ <RecipeInProgress /> } />
           <Route path="/profile" element={ <Profile /> } />

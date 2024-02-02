@@ -4,8 +4,7 @@ import Context from '../../helpers/context/Context';
 import Footer from '../Footer';
 import './index.css';
 import FastButtons from '../FastButtons';
-import MealRecipe from '../MealRecipe';
-import DrinkRecipe from '../DrinkRecipe';
+import RecipeDetails from '../RecipeDetails';
 
 function Recipes() {
   const location = useLocation();
@@ -17,7 +16,6 @@ function Recipes() {
     if (location.pathname === '/meals' && data && data.meals && data.meals.length === 1
       && filter.radio !== 'categories') {
       const mealsId = data.meals[0].idMeal;
-      console.log(idMeal);
       navigate(`/meals/${mealsId}`);
     } else if (location.pathname === '/drinks'
     && data && data.drinks && data.drinks.length === 1) {
@@ -79,8 +77,8 @@ function Recipes() {
       <div data-testid="footer" className="footer-css">
         <Footer />
       </div>
-      {location.pathname === `/meals/${idMeal}` && <MealRecipe />}
-      {location.pathname === `/drinks/${idDrink}` && <DrinkRecipe />}
+      {location.pathname === `/meals/${idMeal}` && <RecipeDetails />}
+      {location.pathname === `/drinks/${idDrink}` && <RecipeDetails />}
     </>
   );
 }
