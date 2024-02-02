@@ -15,7 +15,6 @@ describe('App', () => {
     const inputEmail = screen.getByTestId(INPUT_EMAIL);
     const inputPassword = screen.getByTestId(INPUT_PASSWORD);
     const submitBtn = screen.getByTestId(LOGIN_SUBMIT_BUTTON);
-
     expect(inputEmail).toBeInTheDocument();
     expect(inputPassword).toBeInTheDocument();
     expect(submitBtn).toBeInTheDocument();
@@ -24,7 +23,6 @@ describe('App', () => {
   it('Desabilita o botão ao iniciar', () => {
     renderWithRouter(<App />, { route: '/' });
     const submitBtn = screen.getByTestId(LOGIN_SUBMIT_BUTTON);
-
     expect(submitBtn).toBeDisabled();
   });
 
@@ -33,7 +31,6 @@ describe('App', () => {
     const inputEmail = screen.getByTestId(INPUT_EMAIL);
     const inputPassword = screen.getByTestId(INPUT_PASSWORD);
     const submitBtn = screen.getByTestId(LOGIN_SUBMIT_BUTTON);
-
     fireEvent.change(inputEmail, { target: { value: emailTest } });
     fireEvent.change(inputPassword, { target: { value: passwordTest } });
     expect(submitBtn).toBeEnabled();

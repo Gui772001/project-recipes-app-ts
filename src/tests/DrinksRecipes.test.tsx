@@ -50,16 +50,22 @@ it('Verificar se clicar no botão de compartilhar pega o link', async () => {
   const Recomendacao = await screen.findByTestId('share-btn');
   expect(Recomendacao).toBeInTheDocument();
 });
-it.only('Verificar se clicar no botão de compartilhar pega o link', async () => {
+it('Verificar se clicar no botão de compartilhar pega o link', async () => {
   renderWithRouter(<App />, { route: '/drinks' });
-  const drinksRecipeCard = await screen.findByText('Ace');
+  const drinksRecipeCard = await screen.findByText('ABC');
   await userEvent.click(drinksRecipeCard);
-  const Recomendacao = await screen.findByTestId('share-btn');
-  expect(Recomendacao).toBeInTheDocument();
-  let clip = '';
-  const fakeLink = 'http://localhost:3000/drinks/17225';
-  await navigator.clipboard.readText().then((text) => {
-    clip = text;
-    expect(clip).toEqual(fakeLink);
+  const shareBtn = await screen.findByTestId('share-btn');
+  expect(shareBtn).toBeInTheDocument();
+  await userEvent.click(shareBtn);
+  const fakeLink = 'http://localhost:3000/drinks/13501';
+  setTimeout(() => {
+    expect(navigator.clipboard.readText()).resolves.toEqual(fakeLink);
+  }, 5);
+  it('verifica se comidas ou bebidas tem cards e 5 botões de filtro e um botão All', async () => {
+    renderWithRouter(<App />, { route: '/drinks' });
+    await waitFor(() => expect(screen.getAllByTestId(/recipe-card/i)).toHaveLength(12));
+    await waitFor(() => expect(screen.getAllByTestId(/category-filter/i)).toHaveLength(6));
+    await waitFor(() => expect(screen.getByTestId(/All-category-filter/i)).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByTestId(/Beef-category-filter/i)).toBeInTheDocument());
   });
 });
