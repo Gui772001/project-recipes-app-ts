@@ -60,6 +60,7 @@ function MealRecipe() {
         const apiURL = `https://www.the${category}db.com/api/json/v1/1/lookup.php?i=${urlId}`;
         const response = await fetch(apiURL);
         const result = await response.json();
+        console.log(result);
         setMeal(result.meals[0]);
       };
       fetchData();
