@@ -50,7 +50,7 @@ it('Verificar se clicar no botão de compartilhar pega o link', async () => {
   const Recomendacao = await screen.findByTestId('share-btn');
   expect(Recomendacao).toBeInTheDocument();
 });
-it.skip('Verificar se clicar no botão de compartilhar pega o link', async () => {
+it('Verificar se clicar no botão de compartilhar pega o link', async () => {
   renderWithRouter(<App />, { route: '/drinks' });
   const drinksRecipeCard = await screen.findByText('ABC');
   await userEvent.click(drinksRecipeCard);

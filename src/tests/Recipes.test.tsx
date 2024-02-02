@@ -2,6 +2,7 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
+
 import renderWithRouter from '../renderWithRouter';
 import App from '../App';
 
@@ -43,7 +44,6 @@ describe('Drinks', () => {
   });
 
   it('verifica se exibe um alert quando o input tem mais de 1 caractere no filtro first Letter', () => {
-    vi.spyOn(window, 'alert').mockImplementation(() => {});
     renderWithRouter(<App />, { route: '/drinks' });
 
     const buttonSearch = screen.getByTestId(SEARCH_TEST_ID);
@@ -91,7 +91,6 @@ describe('Meals', () => {
     expect(nameSearch).toBeInTheDocument();
     expect(firstLetter).toBeInTheDocument();
   });
-
   it('Verifica se a Recomendaçao', async () => {
     renderWithRouter(<App />, { route: '/meals' });
     const drinksRecipeCard = await screen.findByText('Kumpir');

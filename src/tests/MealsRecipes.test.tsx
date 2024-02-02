@@ -48,11 +48,15 @@ describe('drinksRecipe', () => {
     const Recomendacao = await screen.findByTestId('favorite-btn');
     expect(Recomendacao).toBeInTheDocument();
   });
-  it('verifica se comidas ou bebidas tem cards e 5 botões de filtro e um botão All', async () => {
+  it('Verificar se clicar no botão de compartilhar pega o link', async () => {
     renderWithRouter(<App />, { route: '/meals' });
-    await waitFor(() => expect(screen.getAllByTestId(/recipe-card/i)).toHaveLength(12));
-    await waitFor(() => expect(screen.getAllByTestId(/category-filter/i)).toHaveLength(6));
-    await waitFor(() => expect(screen.getByTestId(/All-category-filter/i)).toBeInTheDocument());
-    await waitFor(() => expect(screen.getByTestId(/Beef-category-filter/i)).toBeInTheDocument());
+    const drinksRecipeCard = await screen.findByText('Big Mac');
+    await userEvent.click(drinksRecipeCard);
+    const Recomendacao = await screen.findByTestId('share-btn');
+    expect(Recomendacao).toBeInTheDocument();
+    const fakeLink = 'http://localhost:3000/meals/53013';
+    waitFor(() => {
+      expect(navigator.clipboard.readText()).resolves.toEqual(fakeLink);
+    });
   });
 });

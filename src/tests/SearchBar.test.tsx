@@ -9,7 +9,7 @@ const SEARCH_TEST_ID = 'search-top-btn';
 const SEARCH_BTN = 'exec-search-btn';
 
 describe('Header', () => {
-  it.skip('Verifica rota e exibição do header para search', () => {
+  it('Verifica rota e exibição do header para search', () => {
     renderWithRouter(<App />, { route: '/search' });
     expect(window.location.pathname).toBe('/search');
     const tittle = screen.getByRole('heading', { name: 'Search', level: 1 });
