@@ -1,28 +1,29 @@
-import React, { useState, useEffect } from "react";
-import { RecipeType } from "../../services/types";
-import shareIcon from "../../images/shareIcon.svg";
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { RecipeType } from '../../services/types';
+import shareIcon from '../../images/shareIcon.svg';
 
 function DoneRecipes() {
   const [recipes, setRecipes] = useState<RecipeType[]>([]);
   const [copyLink, setCopyLink] = useState(false);
-  const [filterDoneRecipe, setFilterDoneRecipe] = useState("all");
+  const [filterDoneRecipe, setFilterDoneRecipe] = useState('all');
 
   useEffect(() => {
-    const doneRecipes = JSON.parse(localStorage.getItem("doneRecipes") || "[]");
+    const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes') || '[]');
     setRecipes(doneRecipes);
   }, []);
 
   const copyToClipboard = async (recipeName: string) => {
     const recipe = recipes.find((rec) => rec.name === recipeName);
     if (recipe) {
-      const recipeType = recipe.type ? "meal" : "drink";
+      const recipeType = recipe.type ? 'meal' : 'drink';
       const recipeLink = `${window.location.origin}/${recipeType}s/${recipe.id}`;
 
       try {
         await navigator.clipboard.writeText(recipeLink);
         setCopyLink(true);
       } catch (error) {
-        console.log("Failed to copy link to clipboard:", error);
+        console.log('Failed to copy link to clipboard:', error);
       }
     } else {
       console.log(`Recipe with name ${recipeName} not found`);
@@ -38,71 +39,85 @@ function DoneRecipes() {
   return (
     <div>
       <div>
-        <button data-testid="filter-by-all-btn" onClick={() => handleFilterBtn("all")}>
+        <button
+          data-testid="filter-by-all-btn"
+          onClick={ () => handleFilterBtn('all') }
+        >
           All
         </button>
         <button
           data-testid="filter-by-meal-btn"
-          onClick={() => handleFilterBtn("meal")}
+          onClick={ () => handleFilterBtn('meal') }
         >
           Meals
         </button>
         <button
           data-testid="filter-by-drink-btn"
-          onClick={() => handleFilterBtn("drink")}
+          onClick={ () => handleFilterBtn('drink') }
         >
           Drinks
         </button>
       </div>
 
       {recipes
-        .filter((recipe) => filterDoneRecipe === "all" || recipe.type === filterDoneRecipe)
+        .filter(
+          (recipe) => filterDoneRecipe === 'all' || recipe.type === filterDoneRecipe,
+        )
         .map((recipe, index) => (
-          <div key={index}>
-            <div id={recipe.type === "meal" ? "meal-card" : "drink-card"}>
-              <img
-                src={recipe.image}
-                alt={recipe.id}
-                data-testid={`${index}-horizontal-image`}
-                style={{ width: "100px" }}
-              />
-              <h2 data-testid={`${index}-horizontal-name`}>{recipe.name}</h2>
+          <div key={ index }>
+            <Link to={ `/${recipe.type}s/${recipe.id}` }>
+              <div id={ recipe.type === 'meal' ? 'meal-card' : 'drink-card' }>
+                <img
+                  src={ recipe.image }
+                  alt={ recipe.id }
+                  data-testid={ `${index}-horizontal-image` }
+                  style={ { width: '100px' } }
+                />
+                <h2 data-testid={ `${index}-horizontal-name` }>{recipe.name}</h2>
+              </div>
+            </Link>
+
+            <div id={ recipe.type === 'meal' ? 'meal-card' : 'drink-card' }>
               <label htmlFor="">
                 Nationality and category:
-                <p data-testid={`${index}-horizontal-top-text`}>
+                <p data-testid={ `${index}-horizontal-top-text` }>
                   {`${recipe.nationality} - ${recipe.category}`}
                 </p>
               </label>
               <label htmlFor="">
                 Done Date:
-                <p data-testid={`${index}-horizontal-done-date`}>{recipe.doneDate}</p>
+                <p data-testid={ `${index}-horizontal-done-date` }>
+                  {recipe.doneDate}
+                </p>
               </label>
               <label htmlFor="">
-                {recipe.type === "drink" && (
+                { recipe.type === 'drink' && (
                   <>
                     Alcoholic or Not:
-                    <p data-testid={`${index}-horizontal-top-text`}>{recipe.alcoholicOrNot}</p>
+                    <p data-testid={ `${index}-horizontal-top-text` }>
+                      {recipe.alcoholicOrNot}
+                    </p>
                   </>
-                )}
+                ) }
               </label>
               <label htmlFor="">
                 Tags:
                 {recipe.tags?.slice(0, 2).map((tagName, i) => (
                   <span
-                    key={i}
-                    data-testid={`${index}-${tagName}-horizontal-tag`}
+                    key={ i }
+                    data-testid={ `${index}-${tagName}-horizontal-tag` }
                   >
                     {tagName}
                   </span>
                 ))}
               </label>
-              <button onClick={() => copyToClipboard(recipe.name)}>
+              <button onClick={ () => copyToClipboard(recipe.name) }>
                 <img
-                  data-testid={`${index}-horizontal-share-btn`}
-                  src={shareIcon}
+                  data-testid={ `${index}-horizontal-share-btn` }
+                  src={ shareIcon }
                   alt="share-button"
                 />
-                {copyLink ? "Link copied!" : "Share recipe"}
+                {copyLink ? 'Link copied!' : 'Share recipe'}
               </button>
             </div>
           </div>
