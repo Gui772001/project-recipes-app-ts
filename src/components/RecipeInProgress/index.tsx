@@ -128,6 +128,7 @@ function RecipeInProgress() {
     const recipeType = recipe.idMeal ? 'meal' : 'drink';
     const recipeLink = `${window.location
       .origin}/${recipeType}s/${recipeType === 'meal' ? recipe.idMeal : recipe.idDrink}`;
+    console.log(recipeLink);
     try {
       await navigator.clipboard.writeText(recipeLink);
       setCopyLink(true);

@@ -160,7 +160,7 @@ function DrinkRecipe() {
         <button type="button" data-testid="share-btn" onClick={ copyClipboard }>
           <img src={ shareIcon } alt="share" />
         </button>
-        {copyLink ? 'Link copiado!' : 'Share recipe' }
+        {copyLink && <p>Link copied!</p>}
         <button type="button" onClick={ handleFavorite }>
           <img
             src={ favorite ? blackHeartIcon : whiteHeartIcon }

@@ -168,3 +168,17 @@ export type FavRecipesType =
     name:string,
     image:string,
   };
+
+export type RecipeType = {
+  id: string;
+  type: string;
+  image: string;
+  strMealThumb?: string;
+  strDrinkThumb?: string;
+  name: string;
+  category?: string;
+  nationality?: string;
+  doneDate: string;
+  tags?: string[];
+  alcoholicOrNot?: string;
+};
