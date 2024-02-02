@@ -4,11 +4,29 @@ import shareIcon from '../../images/shareIcon.svg';
 
 function DoneRecipes() {
   const [recipes, setRecipes] = useState<RecipeType[]>([]);
+  const [copyLink, setCopyLink] = useState(false);
 
   useEffect(() => {
     const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes') || '[]');
     setRecipes(doneRecipes);
   }, []);
+
+  const copyToClipboard = async (recipeName: string) => {
+    const recipe = recipes.find((rec) => rec.name === recipeName);
+    if (recipe) {
+      const recipeType = recipe.type ? 'meal' : 'drink';
+      const recipeLink = `${window.location.origin}/${recipeType}s/${recipe.id}`;
+
+      try {
+        await navigator.clipboard.writeText(recipeLink);
+        setCopyLink(true);
+      } catch (error) {
+        console.log('Failed to copy link to clipboard:', error);
+      }
+    } else {
+      console.log(`Recipe with name ${recipeName} not found`);
+    }
+  };
 
   console.log(recipes);
 
@@ -36,7 +54,7 @@ function DoneRecipes() {
         <div key={ index }>
           <img
             src={ recipe.image }
-            alt={ recipe.name }
+            alt={ recipe.id }
             data-testid={ `${index}-horizontal-image` }
             style={ { width: '100px' } }
           />
@@ -73,12 +91,15 @@ function DoneRecipes() {
                     {tagName}
                   </span>))}
               </label>
-              <button>
+              <button
+                onClick={ () => copyToClipboard(recipe.name) }
+              >
                 <img
                   data-testid={ `${index}-horizontal-share-btn` }
                   src={ shareIcon }
                   alt="share-button"
                 />
+                {copyLink ? 'Link copied!' : 'Share recipe' }
               </button>
             </div>
           ) : (
@@ -93,12 +114,15 @@ function DoneRecipes() {
               >
                 {recipe.doneDate}
               </p>
-              <button>
+              <button
+                onClick={ () => copyToClipboard(recipe.name) }
+              >
                 <img
                   data-testid={ `${index}-horizontal-share-btn` }
                   src={ shareIcon }
                   alt="share-button"
                 />
+                {copyLink ? 'Link copied!' : 'Share recipe' }
               </button>
             </div>
           )}

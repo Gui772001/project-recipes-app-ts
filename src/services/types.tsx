@@ -170,6 +170,7 @@ export type FavRecipesType =
   };
 
 export type RecipeType = {
+  id: string;
   type: string;
   image: string;
   strMealThumb?: string;
