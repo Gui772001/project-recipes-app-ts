@@ -1,7 +1,7 @@
 import { fireEvent, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
-import renderWithRouter from '../renderWithRouter';
-import App from '../App';
+import renderWithRouter from '../../renderWithRouter';
+import App from '../../App';
 
 const emailTest = 'test@example.com';
 const passwordTest = 'passwordTest';

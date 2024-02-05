@@ -125,7 +125,8 @@ function RecipeInProgress() {
   };
 
   const copyToClipboard = async (recipe: any) => {
-    const recipeType = recipe.idMeal ? 'meal' : 'drink';
+    const recipeType = Object.keys(recipe).includes('idMeal') ? 'meal' : 'drink';
+    console.log(Object.keys(recipe));
     const recipeLink = `${window.location
       .origin}/${recipeType}s/${recipeType === 'meal' ? recipe.idMeal : recipe.idDrink}`;
     console.log(recipeLink);

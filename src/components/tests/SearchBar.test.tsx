@@ -15,7 +15,7 @@ describe('Header', () => {
     const tittle = screen.getByRole('heading', { name: 'Search', level: 1 });
     expect(tittle).toBeInTheDocument();
   });
-  it.skip('Verifica se os radios sao clicaveis', async () => {
+  it('Verifica se os radios sao clicaveis', async () => {
     const mockValue = {
       meals: null,
     };

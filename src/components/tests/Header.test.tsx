@@ -1,10 +1,15 @@
 import { fireEvent, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
-import renderWithRouter from '../renderWithRouter';
-import App from '../App';
+import userEvent from '@testing-library/user-event';
+import { vi } from 'vitest';
+import renderWithRouter from '../../renderWithRouter';
+import App from '../../App';
+import { MockMeas } from '../Mockes/MealsMock';
+import { DrinkMock } from '../Mockes/Drinks.mock';
 
+const fet = (data: any) => ({ json: async () => data }) as Response;
 describe('Header', () => {
-  it('Verifica rota do botão de profile do componente App para o Header', () => {
+  it('Verifica rota do botão de profile do componente App para o Header', async () => {
     renderWithRouter(<App />, { route: '/' });
     const profileButton = screen.getByTestId('profile-top-btn');
     const profileTittle = screen.getByText('Título');
@@ -12,10 +17,12 @@ describe('Header', () => {
     expect(profileButton).toBeInTheDocument();
     expect(profileTittle).toBeInTheDocument();
 
-    fireEvent.click(profileButton);
+    await userEvent.click(profileButton);
     expect(screen.getByText('Olá')).toBeInTheDocument();
   });
   it('verificando os botões de pesquisa se estão na meals', async () => {
+    vi.spyOn(global, 'fetch')
+      .mockResolvedValueOnce(fet(MockMeas));
     renderWithRouter(<App />, { route: '/meals' });
 
     const profileButton = screen.getByTestId('profile-top-btn');
@@ -28,6 +35,8 @@ describe('Header', () => {
     expect(profileButton).toBeInTheDocument();
   });
   it('Verifica rota e exibição do header para drinks', () => {
+    vi.spyOn(global, 'fetch')
+      .mockResolvedValueOnce(fet(DrinkMock));
     renderWithRouter(<App />, { route: '/drinks' });
     expect(window.location.pathname).toBe('/drinks');
     const tittle = screen.getByRole('heading', { name: 'Drinks', level: 1 });
@@ -42,6 +51,9 @@ describe('Header', () => {
   });
 
   it('Verifica rota e exibição do header para meals', () => {
+    vi.spyOn(global, 'fetch')
+      .mockResolvedValueOnce(fet(MockMeas));
+    renderWithRouter(<App />, { route: '/meals' });
     renderWithRouter(<App />, { route: '/meals' });
     expect(window.location.pathname).toBe('/meals');
     const tittle = screen.getByRole('heading', { name: 'Meals', level: 1 });
