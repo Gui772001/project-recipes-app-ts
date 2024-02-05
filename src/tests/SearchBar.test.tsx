@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
@@ -7,6 +7,7 @@ import App from '../App';
 
 const SEARCH_TEST_ID = 'search-top-btn';
 const SEARCH_BTN = 'exec-search-btn';
+const first = 'first-letter-search-radio';
 
 describe('Header', () => {
   it('Verifica rota e exibição do header para search', () => {
@@ -36,5 +37,22 @@ describe('Header', () => {
     await userEvent.click(SearchExecBTN);
     await userEvent.click(radios[2]);
     await userEvent.click(SearchExecBTN);
+  });
+
+  it.only('verifica se exibe um alert quando o input tem mais de 1 caractere no filtro first Letter', () => {
+    renderWithRouter(<App />, { route: '/drinks' });
+
+    const buttonSearch = screen.getByTestId(SEARCH_TEST_ID);
+    fireEvent.click(buttonSearch);
+
+    const inputSearch = screen.getByTestId(SEARCH_TEST_ID);
+    userEvent.type(inputSearch, 'aaa');
+
+    const firstLetter = screen.getByTestId(first);
+    fireEvent.click(firstLetter);
+
+    const searchButton = screen.getByTestId(SEARCH_BTN);
+    fireEvent.click(searchButton);
+    expect(window.alert).toBeCalled();
   });
 });

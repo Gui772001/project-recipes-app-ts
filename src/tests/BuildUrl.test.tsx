@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom/extend-expect';
-import buildURL from '../../services/buildURL';
+import buildURL from '../services/buildURL';
 
 describe('BuildUrl', () => {
   it('Retorna alguma comida com os filtros', () => {
