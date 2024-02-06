@@ -43,6 +43,7 @@ function RecipeDetails() {
     const startBtnStateString = localStorage.getItem('inProgressRecipes');
     if (startBtnStateString !== null) {
       const startBtnState = JSON.parse(startBtnStateString);
+      console.log(startBtnState);
       const keys = Object.keys(category === 'meal'
         ? startBtnState.meals : startBtnState.drinks);
       const resultBtn = keys.includes(urlId);
@@ -74,7 +75,6 @@ function RecipeDetails() {
       if (category === 'meal') {
         setMeal(result.meals[0]);
       } else if (category === 'drink') {
-        console.log(result.drinks[0]);
         setDrink(result.drinks[0]);
       }
     };
@@ -82,23 +82,14 @@ function RecipeDetails() {
     if ((data.length === 0 || currentPath
       .includes(`/${category}s/${urlId}`)) && recipeType) {
       fetchData();
-      console.log('aleatorio');
-    // } else if (recipeType === 'meal') {
-    //   // setMeal(data.meals[0]);
-    // } else if (recipeType === 'drink') {
-    //   // setDrink(data.drinks[0]);
     }
   }, [data, currentPath, recipeType, urlId]);
-
-  console.log(meal);
-  console.log(drink);
 
   if (!meal || !drink) {
     return <div>Loading...</div>;
   }
 
   const getIngredients = (catData: any) => {
-    console.log(catData);
     const ingredients = [];
     for (let i = 1; i <= 20; i += 1) {
       const ingredient = catData[`strIngredient${i}`];

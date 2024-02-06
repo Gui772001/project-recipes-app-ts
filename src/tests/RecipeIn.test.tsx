@@ -1,0 +1,68 @@
+import { act, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { vi } from 'vitest';
+import App from '../App';
+import renderWithRouter from '../renderWithRouter';
+import { MockMeas } from '../helpers/Mockes/MealsMock';
+import { DrinkMock } from '../helpers/Mockes/Drinks.mock';
+
+const fet = (data: any) => ({ json: async () => data }) as Response;
+describe('RecipeIn', () => {
+  it('Veficando se ao clicar em continue recipes vai para rota certa em meals', async () => {
+    renderWithRouter(<App />, { route: '/meals' });
+    const Corba = await screen.findByText('Corba');
+    await userEvent.click(Corba);
+    const butao = await screen.findByTestId('start-recipe-btn');
+    await userEvent.click(butao);
+    expect(window.location.pathname).toBe('/meals/52977/in-progress');
+  });
+  it('Veficando se ao clicar em continue recipes vai para rota certa drinks', async () => {
+    renderWithRouter(<App />, { route: '/drinks' });
+    const drinks = await screen.findByText('A1');
+    await userEvent.click(drinks);
+    const butao = await screen.findByTestId('start-recipe-btn');
+    await userEvent.click(butao);
+    expect(window.location.pathname).toBe('/drinks/17222/in-progress');
+  });
+  it('Verificar se a categoria e os ingredientes', async () => {
+    renderWithRouter(<App />, { route: '/meals/53065/in-progress' });
+    const MealsSushi = await screen.findByText('Sushi');
+    expect(MealsSushi).toBeInTheDocument();
+    const RecipeCategory = await screen.findByTestId('recipe-category');
+    expect(RecipeCategory).toBeInTheDocument();
+    const ingredientes = await screen.findByTestId('0-ingredient-step');
+    expect(ingredientes).toBeInTheDocument();
+  });
+
+  it('Veficando se ao clicar o checkbox e marcado', async () => {
+    renderWithRouter(<App />, { route: '/meals/53069/in-progress' });
+    const ingredientCheckbox1 = await screen.findByTestId('0-ingredient-step');
+    const ingredientCheckbox2 = await screen.findByTestId('1-ingredient-step');
+    const ingredientCheckbox3 = await screen.findByTestId('2-ingredient-step');
+    const ingredientCheckbox4 = await screen.findByTestId('3-ingredient-step');
+    const ingredientCheckbox5 = await screen.findByTestId('4-ingredient-step');
+    const ingredientCheckbox6 = await screen.findByTestId('5-ingredient-step');
+    const ingredientCheckbox7 = await screen.findByTestId('6-ingredient-step');
+    const ingredientCheckbox8 = await screen.findByTestId('7-ingredient-step');
+
+    await userEvent.click(ingredientCheckbox1);
+    await userEvent.click(ingredientCheckbox2);
+    await userEvent.click(ingredientCheckbox3);
+    await userEvent.click(ingredientCheckbox4);
+    await userEvent.click(ingredientCheckbox5);
+    await userEvent.click(ingredientCheckbox6);
+    await userEvent.click(ingredientCheckbox7);
+    await userEvent.click(ingredientCheckbox8);
+    const submitBtn = await screen.findByTestId('finish-recipe-btn');
+    expect(submitBtn).not.toBeDisabled();
+  });
+
+  it('Testa se ao clicar em compartilhar, o link da receita é salvo no clipboard', async () => {
+    renderWithRouter(<App />, { route: '/meals/53069/in-progress' });
+    const shareButton = await screen.findByTestId('share-btn');
+    expect(shareButton).toBeInTheDocument();
+    await userEvent.click(shareButton);
+    const shareMessage = await screen.findByText('Link copied!');
+    expect(shareMessage).toBeInTheDocument();
+  });
+});

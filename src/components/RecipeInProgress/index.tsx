@@ -126,10 +126,8 @@ function RecipeInProgress() {
 
   const copyToClipboard = async (recipe: any) => {
     const recipeType = Object.keys(recipe).includes('idMeal') ? 'meal' : 'drink';
-    console.log(Object.keys(recipe));
     const recipeLink = `${window.location
       .origin}/${recipeType}s/${recipeType === 'meal' ? recipe.idMeal : recipe.idDrink}`;
-    console.log(recipeLink);
     try {
       await navigator.clipboard.writeText(recipeLink);
       setCopyLink(true);
@@ -175,6 +173,7 @@ function RecipeInProgress() {
           <li key={ key }>
             <label htmlFor={ key } data-testid={ `${index}-ingredient-step` }>
               <input
+                id={ key }
                 type="checkbox"
                 checked={
                   (inProgressRecipes[currentPath
