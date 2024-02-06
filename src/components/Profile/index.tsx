@@ -8,7 +8,12 @@ function Profile() {
 
   const getUser = () => {
     const userJSON = localStorage.getItem('user');
-    const newUser = userJSON ? JSON.parse(userJSON) : null;
+    let newUser = null;
+    try {
+      newUser = userJSON ? JSON.parse(userJSON) : null;
+    } catch (error) {
+      console.error('Failed to parse user JSON:', error);
+    }
     const email = newUser ? newUser.email : null;
     setUser(email);
   };
