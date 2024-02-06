@@ -1,5 +1,7 @@
-const localStorageMock = (function () {
-  let store = { inProgressRecipes: { meals: {}, cocktails: {} }, doneRecipes: [] };
+export const localStorageMock = (function () {
+  let store = { inProgressRecipes: { meals: {}, cocktails: {} },
+    doneRecipes: [],
+    user: { email: {} } };
 
   return {
     getItem(key: string) {
@@ -11,7 +13,9 @@ const localStorageMock = (function () {
     },
 
     clear() {
-      store = { inProgressRecipes: { meals: {}, cocktails: {} }, doneRecipes: [] };
+      store = { inProgressRecipes: { meals: {}, cocktails: {} },
+        doneRecipes: [],
+        user: { email: {} } };
     },
 
     removeItem(key: string) {
