@@ -132,7 +132,7 @@ function RecipeInProgress() {
       await navigator.clipboard.writeText(recipeLink);
       setCopyLink(true);
     } catch (error) {
-      console.log('Failed to copy link to clipboard:', error);
+      window.alert('Failed to copy link to clipboard:');
     }
   };
 

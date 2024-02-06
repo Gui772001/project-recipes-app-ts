@@ -31,7 +31,7 @@ describe('RecipeIn', () => {
     expect(ingredientes).toBeInTheDocument();
   });
 
-  it('Veficando se ao clicar o checkbox e marcado', async () => {
+  it('Veficando se ao clicar o checkbox de comida e marcado', async () => {
     renderWithRouter(<App />, { route: '/meals/53069/in-progress' });
     const ingredientCheckbox1 = await screen.findByTestId('0-ingredient-step');
     const ingredientCheckbox2 = await screen.findByTestId('1-ingredient-step');
@@ -52,6 +52,24 @@ describe('RecipeIn', () => {
     await userEvent.click(ingredientCheckbox8);
     const submitBtn = await screen.findByTestId('finish-recipe-btn');
     expect(submitBtn).not.toBeDisabled();
+    await userEvent.click(submitBtn);
+    expect(window.location.pathname).toBe('/done-recipes');
+    expect(ingredientCheckbox5).not.toBeInTheDocument();
+  });
+  it('Veficando se ao clicar o checkbox de bebida e marcado', async () => {
+    renderWithRouter(<App />, { route: '/drinks/15853/in-progress' });
+    const ingredientCheckbox1 = await screen.findByTestId('0-ingredient-step');
+    const ingredientCheckbox2 = await screen.findByTestId('1-ingredient-step');
+    const ingredientCheckbox3 = await screen.findByTestId('2-ingredient-step');
+
+    await userEvent.click(ingredientCheckbox1);
+    await userEvent.click(ingredientCheckbox2);
+    await userEvent.click(ingredientCheckbox3);
+    const submitBtn = await screen.findByTestId('finish-recipe-btn');
+    expect(submitBtn).not.toBeDisabled();
+    await userEvent.click(submitBtn);
+    expect(window.location.pathname).toBe('/done-recipes');
+    expect(ingredientCheckbox1).not.toBeInTheDocument();
   });
 
   it('Testa se ao clicar em compartilhar, o link da receita é salvo no clipboard', async () => {
@@ -78,8 +96,15 @@ describe('RecipeIn', () => {
     await userEvent.click(ingredientCheckbox1);
     expect(ingredientCheckbox1).toHaveStyle('text-decoration: none');
   });
-  it('Verificando se ao clicar em favoritos a imagem muda', async () => {
+  it('Verificando se ao clicar em favoritos da comida a imagem muda', async () => {
     renderWithRouter(<App />, { route: '/meals/52977/in-progress' });
+    const ButtunFavorite = await screen.findByTestId('favorite-btn');
+    expect(ButtunFavorite).toHaveAttribute('src', '/src/images/whiteHeartIcon.svg');
+    await userEvent.click(ButtunFavorite);
+    expect(ButtunFavorite).toHaveAttribute('src', '/src/images/blackHeartIcon.svg');
+  });
+  it('Verificando se ao clicar em favoritos da bebida a imagem muda', async () => {
+    renderWithRouter(<App />, { route: '/drinks/17837/in-progress' });
     const ButtunFavorite = await screen.findByTestId('favorite-btn');
     expect(ButtunFavorite).toHaveAttribute('src', '/src/images/whiteHeartIcon.svg');
     await userEvent.click(ButtunFavorite);
