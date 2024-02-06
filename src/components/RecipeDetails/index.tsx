@@ -71,10 +71,10 @@ function RecipeDetails() {
       const apiURL = `https://www.the${categoryFix}db.com/api/json/v1/1/lookup.php?i=${urlId}`;
       const response = await fetch(apiURL);
       const result = await response.json();
-
       if (category === 'meal') {
         setMeal(result.meals[0]);
       } else if (category === 'drink') {
+        console.log(result.drinks[0]);
         setDrink(result.drinks[0]);
       }
     };
@@ -82,10 +82,11 @@ function RecipeDetails() {
     if ((data.length === 0 || currentPath
       .includes(`/${category}s/${urlId}`)) && recipeType) {
       fetchData();
-    } else if (recipeType === 'meal') {
-      setMeal(data.meals[0]);
-    } else if (recipeType === 'drink') {
-      setDrink(data.drinks[0]);
+      console.log('aleatorio');
+    // } else if (recipeType === 'meal') {
+    //   // setMeal(data.meals[0]);
+    // } else if (recipeType === 'drink') {
+    //   // setDrink(data.drinks[0]);
     }
   }, [data, currentPath, recipeType, urlId]);
 

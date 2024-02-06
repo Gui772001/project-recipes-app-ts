@@ -5,6 +5,7 @@ import { vi } from 'vitest';
 import renderWithRouter from '../renderWithRouter';
 import App from '../App';
 
+const SEARCH_INPUT_TEST_ID = 'search-input';
 const SEARCH_TEST_ID = 'search-top-btn';
 const SEARCH_BTN = 'exec-search-btn';
 const first = 'first-letter-search-radio';
@@ -39,14 +40,15 @@ describe('Header', () => {
     await userEvent.click(SearchExecBTN);
   });
 
-  it.only('verifica se exibe um alert quando o input tem mais de 1 caractere no filtro first Letter', () => {
+  it('verifica se exibe um alert quando o input tem mais de 1 caractere no filtro first Letter', () => {
+    vi.spyOn(window, 'alert').mockImplementation(() => {});
     renderWithRouter(<App />, { route: '/drinks' });
 
     const buttonSearch = screen.getByTestId(SEARCH_TEST_ID);
     fireEvent.click(buttonSearch);
 
-    const inputSearch = screen.getByTestId(SEARCH_TEST_ID);
-    userEvent.type(inputSearch, 'aaa');
+    const inputSearch = screen.getByTestId(SEARCH_INPUT_TEST_ID);
+    fireEvent.change(inputSearch, { target: { value: 'aa' } });
 
     const firstLetter = screen.getByTestId(first);
     fireEvent.click(firstLetter);
