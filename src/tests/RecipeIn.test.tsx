@@ -3,6 +3,10 @@ import userEvent from '@testing-library/user-event';
 import App from '../App';
 import renderWithRouter from '../renderWithRouter';
 
+const ingredientCard0 = '0-ingredient-step';
+const ingredientCard1 = '1-ingredient-step';
+const ingredientCard2 = '2-ingredient-step';
+
 describe('RecipeIn', () => {
   it('Veficando se ao clicar em continue recipes vai para rota certa em meals', async () => {
     renderWithRouter(<App />, { route: '/meals' });
@@ -27,15 +31,15 @@ describe('RecipeIn', () => {
     expect(MealsSushi).toBeInTheDocument();
     const RecipeCategory = await screen.findByTestId('recipe-category');
     expect(RecipeCategory).toBeInTheDocument();
-    const ingredientes = await screen.findByTestId('0-ingredient-step');
+    const ingredientes = await screen.findByTestId(ingredientCard0);
     expect(ingredientes).toBeInTheDocument();
   });
 
   it('Veficando se ao clicar o checkbox de comida e marcado', async () => {
     renderWithRouter(<App />, { route: '/meals/53069/in-progress' });
-    const ingredientCheckbox1 = await screen.findByTestId('0-ingredient-step');
-    const ingredientCheckbox2 = await screen.findByTestId('1-ingredient-step');
-    const ingredientCheckbox3 = await screen.findByTestId('2-ingredient-step');
+    const ingredientCheckbox1 = await screen.findByTestId(ingredientCard0);
+    const ingredientCheckbox2 = await screen.findByTestId(ingredientCard1);
+    const ingredientCheckbox3 = await screen.findByTestId(ingredientCard2);
     const ingredientCheckbox4 = await screen.findByTestId('3-ingredient-step');
     const ingredientCheckbox5 = await screen.findByTestId('4-ingredient-step');
     const ingredientCheckbox6 = await screen.findByTestId('5-ingredient-step');
@@ -58,9 +62,9 @@ describe('RecipeIn', () => {
   });
   it('Veficando se ao clicar o checkbox de bebida e marcado', async () => {
     renderWithRouter(<App />, { route: '/drinks/15853/in-progress' });
-    const ingredientCheckbox1 = await screen.findByTestId('0-ingredient-step');
-    const ingredientCheckbox2 = await screen.findByTestId('1-ingredient-step');
-    const ingredientCheckbox3 = await screen.findByTestId('2-ingredient-step');
+    const ingredientCheckbox1 = await screen.findByTestId(ingredientCard0);
+    const ingredientCheckbox2 = await screen.findByTestId(ingredientCard1);
+    const ingredientCheckbox3 = await screen.findByTestId(ingredientCard2);
 
     await userEvent.click(ingredientCheckbox1);
     await userEvent.click(ingredientCheckbox2);
@@ -82,7 +86,7 @@ describe('RecipeIn', () => {
   });
   it('Veficando se ao clicar em numa receita de comida o css do checkbox muda ', async () => {
     renderWithRouter(<App />, { route: '/meals/53069/in-progress' });
-    const ingredientCheckbox1 = await screen.findByTestId('2-ingredient-step');
+    const ingredientCheckbox1 = await screen.findByTestId(ingredientCard2);
     await userEvent.click(ingredientCheckbox1);
     expect(ingredientCheckbox1).toHaveStyle('text-decoration: none');
     await userEvent.click(ingredientCheckbox1);
@@ -90,7 +94,7 @@ describe('RecipeIn', () => {
   });
   it('Veficando se ao clicar em numa receita de bebida o css do checkbox muda', async () => {
     renderWithRouter(<App />, { route: '/drinks/17222/in-progress' });
-    const ingredientCheckbox1 = await screen.findByTestId('1-ingredient-step');
+    const ingredientCheckbox1 = await screen.findByTestId(ingredientCard1);
     await userEvent.click(ingredientCheckbox1);
     expect(ingredientCheckbox1).toHaveStyle('text-decoration: line-through solid rgb(0, 0, 0)');
     await userEvent.click(ingredientCheckbox1);
