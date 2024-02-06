@@ -10,7 +10,6 @@ function buildURL(filter: any, pathname: any) {
   const SEARCH_DEFAULT = 'search.php?s=';
 
   const MEALS = pathname === '/meals';
-  // console.log(`${MEALS ? FOOD_API_URL : DRINK_API_URL}${SEARCH_ALL}`);
 
   let apiURL = '';
   switch (filter.radio) {
@@ -28,7 +27,6 @@ function buildURL(filter: any, pathname: any) {
       break;
     }
     case 'all': {
-      console.log(`${MEALS ? FOOD_API_URL : DRINK_API_URL}${SEARCH_ALL}`);
       apiURL = `${MEALS ? FOOD_API_URL : DRINK_API_URL}${SEARCH_ALL}`;
       break;
     }

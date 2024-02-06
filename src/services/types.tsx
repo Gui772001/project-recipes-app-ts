@@ -190,6 +190,8 @@ export type RecipeDetailsProps = {
   youtubeEmbedUrl: string;
   location: any;
   recipe: Meal | Drink;
+  meal: Meal;
+  drink: Drink;
   ingredients: string[];
   handleButtonStart: () => void;
   copyClipboard: (location: any, setCopyLink: any) => Promise<void>;

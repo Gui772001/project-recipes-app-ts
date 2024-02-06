@@ -34,8 +34,6 @@ function DoneRecipes() {
     setFilterDoneRecipe(type);
   };
 
-  console.log(recipes);
-
   return (
     <div>
       <div>

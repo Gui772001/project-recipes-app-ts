@@ -18,7 +18,7 @@ function RenderDetails({ type, recipe, ingredients,
     fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=')
       .then((response) => response.json())
       .then((data) => setDrinkData(data.drinks));
-  });
+  }, []);
 
   const recommendedItems = type === 'meal' ? drinkData : mealData;
 
